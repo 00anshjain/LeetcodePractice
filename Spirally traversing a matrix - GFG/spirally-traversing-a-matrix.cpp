@@ -19,9 +19,10 @@ class Solution
     		int x = i, y = j;
     		if(arr[i][j] == -1)
     		{
-    		    i++;
-    		    j++;
-    		    continue;
+    		    break;
+    		  //  i++;
+    		  //  j++;
+    		  //  continue;
     		}
     		
     // 		cout<<x<<"  "<<y<<endl;
