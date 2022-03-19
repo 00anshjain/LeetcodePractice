@@ -7,81 +7,35 @@ class Solution
 {   
     public: 
     //Function to return a list of integers denoting spiral traversal of matrix.
-    vector<int> spirallyTraverse(vector<vector<int> > arr, int n, int m) 
+    void helper(vector<vector<int>>& mat, int r, int c, int n, int m, vector<int>& ans)
     {
-        int i = 0;
-    	int j = 0;
-    	vector<int> ans;
-    	bool flag = true;
-    	while(flag)
-    	{
-    		flag = false;
-    		int x = i, y = j;
-    		if(arr[i][j] == -1)
-    		{
-    		    break;
-    		  //  i++;
-    		  //  j++;
-    		  //  continue;
-    		}
-    		
-    // 		cout<<x<<"  "<<y<<endl;
-    		while(y <  m - i)
-    		{
-    		  //  cout<<"In"<<endl;
-    		    if(arr[x][y] == -1)
-    		        break;
-    			flag = true;
-    // 			cout<<arr[x][y]<<", ";
-    			ans.push_back(arr[x][y]);
-    			arr[x][y] = -1;
-    			y++;
-    		}
-    		if(n == 1)
-    		    break;
-    		// y = m - i;
-    		y--;
-    		x++;
-    		while(x <  n - i)
-    		{
-    		    if(arr[x][y] == -1)
-    		        break;
-    			flag = true;
-    // 			cout<<arr[x][y]<<", ";
-                ans.push_back(arr[x][y]);
-    			arr[x][y] = -1;
-    			x++;
-    		}
-    		x--;
-    		y--;
-    		while(y >= j)
-    		{
-    		    if(arr[x][y] == -1)
-    		        break;
-    			flag = true;
-    // 			cout<<arr[x][y]<<", ";
-    			ans.push_back(arr[x][y]);
-    			arr[x][y] = -1;
-    			y--;
-    		}
-    		y++;
-    		x--;
-    		while(x > i)
-    		{
-    		    if(arr[x][y] == -1)
-    		        break;
-    			flag = true;
-    // 			cout<<arr[x][y]<<", ";
-    			ans.push_back(arr[x][y]);
-    			arr[x][y] = -1;
-    			x--;
-    		}
-    		i++;
-    		j++;
-    	}
-    	return ans;
-    // 	cout<<"END"<<endl;
-            // code here 
+        if(r >= n || c >= m)
+            return;
+        for(int j = c; j < m; j++)
+            ans.push_back(mat[r][j]);
+        for(int i = r+1; i < n; i++)
+            ans.push_back(mat[i][m-1]);
+        if((n-1) != r)
+        {
+            for(int j = m-2; j >= c; j--)
+                ans.push_back(mat[n-1][j]);
+        }
+        if((m-1) != c)
+        {
+            for(int i = n-2; i > r; i--)
+                ans.push_back(mat[i][c]);
+        }
+        helper(mat, r+1, c+1, n-1, m-1, ans);
+    }
+    vector<int> spirallyTraverse(vector<vector<int> > matrix, int n, int m) 
+    {
+        // int n = matrix.size();
+        // int m = matrix[0].size();
+        vector<int> ans;
+        helper(matrix, 0, 0, n, m, ans);
+        return ans;
+
+        // code here 
     }
 };
 
