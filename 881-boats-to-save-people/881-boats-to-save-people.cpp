@@ -13,16 +13,10 @@ public:
         while(left <= right)
         {
             if(people[left] + people[right] <= limit )
-            {
-                ans++;
                 left++;
-                right--;
-            }
-            else
-            {
-                ans++;
-                right--;
-            }
+            
+            ans++;
+            right--;
         }
         return ans;
     }
