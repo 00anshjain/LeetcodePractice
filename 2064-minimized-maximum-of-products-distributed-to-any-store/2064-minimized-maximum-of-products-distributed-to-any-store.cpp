@@ -5,11 +5,12 @@ public:
         int p = 0;
         for(auto x : q)
         {
-            while(x > 0)
-            {
-                x -= mid;
-                p++;
-            }
+            p += (x/mid + (x%mid > 0 ? 1 : 0));
+            // while(x > 0)
+            // {
+            //     x -= mid;
+            //     p++;
+            // }
         }
         return p;
     }
