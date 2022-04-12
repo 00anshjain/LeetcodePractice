@@ -56,24 +56,24 @@ class Solution
     	    {
     	        if(!prev)
     	        {
-    	            curr = curr->next;
-    	            head = curr;
-    			}    
-    	        else
-    			{
-    				if(curr == prev)
-    				{
-    					prev = NULL;
-    					curr = head;
-    				}
-    				else
-    				{
-    					prev->next = curr->next;
-    					curr = prev;
-    				}
-    			}
+    	            if(curr == head)
+    	            {
+    	                curr = curr->next;
+    	                head = curr;
+    	            }
+    	            else
+    	            {
+    	                curr = head;
+    	            }
     	           // curr = curr->next;
     	           // head = curr;
+    	        }
+    	        else
+    	        {
+    	            prev->next = curr->next;
+    	            curr = prev;
+    	            prev = NULL;
+    	        }
     	    }
     	    else
     	    {
