@@ -11,40 +11,26 @@ class Solution
 {
     public:
     //Function to find the maximum number of cuts.
+    int maximizeCuts(int n, int x, int y, int z, vector<int> &dp)
+    {
+        if(n == 0)
+            return 0;
+        if(n < 0)
+            return INT_MIN;
+        if(dp[n] != -1)
+            return dp[n];
+        int a = 1 + maximizeCuts(n-x,  x, y, z, dp);
+        int b = 1 + maximizeCuts(n-y, x, y, z, dp);
+        int c = 1 + maximizeCuts(n-z, x, y, z, dp);
+        return dp[n] = max(a, max(b, c));
+    }
     int maximizeTheCuts(int n, int x, int y, int z)
     {
-        vector<int> dp(n+1, 0);
-        if(x <= n)
-            dp[x] = 1;
-        if(y <= n)
-            dp[y] = 1;
-        if(z <= n)
-            dp[z] = 1;
-        // int dp[n+1];
-        // dp[0] = 1;
-        // memset(dp, 1, sizeof(dp));
-        dp[0] = 0;
-        for(int i = 1; i <= n; i++)
-        {
-            // dp[i] = 1;
-            if(i >= x && dp[i-x] != 0)
-            {
-                // if(dp[i-x] != 0)
-                    dp[i] = dp[i-x] + dp[x];
-            }
-            if(i >= y && dp[i-y] != 0)
-            {
-                dp[i] = max(dp[i], dp[i-y] + dp[y]);
-            }
-            if(i >= z && dp[i-z] != 0)
-            {
-                dp[i] = max(dp[i], dp[i-z] + dp[z]);
-            }
-        }
-        // for(int i = 0;i <= n; i++)
-        //     cout<<dp[i]<<" ";
-        // cout<<endl;
-        return dp[n];
+        vector<int> dp(n+1, -1);
+        int ans = maximizeCuts(n, x, y, z, dp);
+        if (ans < 0)
+            return 0;
+        return ans;
         //Your code here
     }
 };
