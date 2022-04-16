@@ -1,42 +1,56 @@
 class Solution {
 public:
-    int ans=0;
-    bool isPalin(string& s)
+    int ans, n;
+    bool isPalin(string s)
     {
-        int i=0,j=s.length()-1;
-        while(i<=j)
+        int i = 0, j = s.size() - 1;
+        while(i < j)
         {
-            if(s[i]!=s[j])
-            return false;
-            i++;
-            j--;
+            if(s[i++] != s[j--])
+                return false;
         }
         return true;
     }
-    void dfs(string& s,string& s1,string& s2,int i)
+    int fun(string &s, int i, int j, vector<vector<int>> &dp)
     {
-        if(i>=s.length())
+        if(i > j)
+            return 0;
+        if(i == j)
+            return 1;
+        if(dp[i][j] != -1)
+            return dp[i][j];
+        if(s[i] == s[j])
+            return dp[i][j] = 2 + fun(s, i+1, j-1, dp);
+        return max(fun(s, i, j-1, dp), fun(s, i+1, j, dp));
+    }
+    void func(string &s, int i, string curr, int mask)
+    {
+        if(i == n)
         {
-            if(isPalin(s1)&&isPalin(s2))
+            if(!isPalin(curr))
+                return;
+            string check = "";
+            int k = curr.size();
+            for(int j = 0; j < n; j++)
             {
-                ans=max(ans,((int)s1.length())*((int)s2.length()));
+                if((mask & (1<<j))  == 0)
+                {
+                    check += s[j];
+                }
             }
+            int sz = check.size();
+            vector<vector<int>> dp(sz, vector<int>(sz, -1));
+            ans = max(ans, k * fun(check, 0, sz - 1, dp));
             return;
         }
-        s1+=s[i];
-        dfs(s,s1,s2,i+1);
-        s1.pop_back();
-        
-        s2+=s[i];
-        dfs(s,s1,s2,i+1);
-        s2.pop_back();
-        
-        dfs(s,s1,s2,i+1);
+        func(s, i+1, curr, mask);
+        func(s, i+1, curr + s[i], mask | (1<<i));
     }
     int maxProduct(string s) {
-        string s1="",s2="";
-        int i=0;
-        dfs(s,s1,s2,i);
+        ans = 0;
+        n = s.size();
+        string curr = "";
+        func(s, 0, curr, 0);
         return ans;
     }
 };
