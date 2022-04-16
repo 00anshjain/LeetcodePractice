@@ -11,23 +11,41 @@ class Solution{
 public:
     int longestSubsequence(int n, int arr[])
     {
-        // int dp[n];
-        vector<int> dp(n, 1);
-        // memset(dp, 1,sizeof(dp));
-        dp[n-1] = 1;
-        int mx = 1;
-        for(int i = n-2; i >= 0; i--)
+        unordered_map<int, int> mp;
+        int mx = 0;
+        for(int i = 0; i < n; i++)
         {
-            for(int j = i+1; j < n; j++)
+            if(mp.find(arr[i]) == mp.end())
+                mp[arr[i]] = 1;
+            if(mp.find(arr[i] - 1) != mp.end())
             {
-                if(abs(arr[j] - arr[i]) == 1)
-                {
-                    dp[i] = max(dp[i], 1 + dp[j]);
-                }
+                mp[arr[i]] = max(mp[arr[i]], mp[arr[i] - 1] + 1);
             }
-            mx = max(mx, dp[i]);
+            if(mp.find(arr[i] + 1) != mp.end())
+            {
+                mp[arr[i]] = max(mp[arr[i]], mp[arr[i] + 1] + 1);
+            }
+            mx = max(mp[arr[i]], mx);
+            
         }
         return mx;
+        // int dp[n];
+        // vector<int> dp(n, 1);
+        // // memset(dp, 1,sizeof(dp));
+        // dp[n-1] = 1;
+        // int mx = 1;
+        // for(int i = n-2; i >= 0; i--)
+        // {
+        //     for(int j = i+1; j < n; j++)
+        //     {
+        //         if(abs(arr[j] - arr[i]) == 1)
+        //         {
+        //             dp[i] = max(dp[i], 1 + dp[j]);
+        //         }
+        //     }
+        //     mx = max(mx, dp[i]);
+        // }
+        // return mx;
         // code here
     }
 };
