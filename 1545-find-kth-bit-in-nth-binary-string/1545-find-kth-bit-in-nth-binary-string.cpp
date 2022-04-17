@@ -1,23 +1,24 @@
 class Solution {
 public:
-    string makeNewString(string s)
+    void makeNewString(string &s)
     {
-        string k = s;
-        k += '1';
-        for(int i = s.size() - 1; i>= 0; i--)
+        // string k = s;
+        s += '1';
+        for(int i = s.size() - 2; i>= 0; i--)
         {
             if(s[i]== '1')
-                k += '0';
+                s += '0';
             else
-                k += '1';
+                s += '1';
         }
-        return k;
+        // return k;
     }
     char recur(string &s, int k, int n)
     {
         if(s.size() >= k)
             return s[k-1];
-        s = makeNewString(s);
+        // s = 
+            makeNewString(s);
         return recur(s, k, n);
     }
     char findKthBit(int n, int k) {
