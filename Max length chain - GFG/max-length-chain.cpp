@@ -38,35 +38,28 @@ struct val{
 };*/
 
 /*You are required to complete this method*/
-static bool comp(struct val v1, struct val v2)
+static bool comp(struct val a, struct val b)
 {
-    return v1.first < v2.first;
-    // if(v1.first < v2.first)
-        // return true;
-        
-    // else
-    //     return v1.second <= v2.second;
+    // if(a.first == b.first)
+    //     return a.second < b.second;
+    return a.first < b.first;
 }
 int maxChainLen(struct val p[],int n)
 {
     sort(p, p+n, comp);
-    // for(int i = 1; i < n; i++)
-    //     cout<<p[i].first<<" "<<p[i].second<<endl;
-    long long int last = p[0].second;
-    int cnt = 1;
-    for(int i = 1; i < n; i++)
+    vector<int> dp(n, 1);
+    int mx=0;
+    for(int i = n-1; i>= 0; i--)
     {
-        if(p[i].first > last)
+        for(int j = i+1; j< n; j++)
         {
-            cnt++;
-            last = p[i].second;
+            if(p[i].second < p[j].first)
+            {
+                dp[i] = max(dp[i], 1+dp[j]);
+            }
         }
-        else
-        {
-            if(p[i].second < last)
-                last = p[i].second;
-        }
+        mx = max(dp[i], mx);
     }
-    return cnt;
-            //Your code here
+    return mx;
+//Your code here
 }
