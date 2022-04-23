@@ -19,7 +19,7 @@ class Solution
         for(int i = 1; i < n; i++)
         {
             ans[i] = 1;
-            if(prices[i] >= prices[i-1])
+            // if(prices[i] >= prices[i-1])
             {
                 while(!st.empty() && st.top().first <= prices[i])
                 {
