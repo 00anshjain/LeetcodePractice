@@ -17,20 +17,20 @@ public:
 	        if(S[i]=='0')
 	        {
 	            cnt++;
-	           // if(mx < cnt)
-	           //     mx = cnt;
+	            if(mx < cnt)
+	                mx = cnt;
 	        }
 	        else
 	        {
 	            cnt--;
-	           // if(mx > cnt)
-	           //     mx = cnt;
-	           // if(cnt < 0)
-	           //     cnt = 0;
+	            if(mx < cnt)
+	                mx = cnt;
+	            if(cnt < 0)
+	                cnt = 0;
 	        }
-	        mx = max(cnt, mx);
-	        if(cnt<0)
-	        cnt=0;
+	       // mx = max(cnt, mx);
+	       // if(cnt<0)
+	       // cnt=0;
 	    }
 	    return mx;
 	    // Your code goes here
