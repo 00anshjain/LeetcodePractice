@@ -31,27 +31,40 @@ class Solution
     {
         return j1.profit > j2.profit;
     }
+    int find(vector<int> &parent, int i)
+    {
+        if(parent[i] == i)
+            return i;
+        return parent[i] = find(parent, parent[i]);
+    }
+    void union_gr(vector<int> &parent, int x, int y)
+    {
+        parent[x] = y;
+    }
     vector<int> JobScheduling(Job arr[], int n) 
     { 
         sort(arr, arr+n, comp);
         int mxTime = 0;
         for(int i = 0; i < n; i++)
             mxTime = max(mxTime, arr[i].dead);
-        vector<int> res(mxTime, -1);
+        vector<int> parent(mxTime+1);
+        for(int i = 1; i <= mxTime; i++)
+        {
+            parent[i] = i;
+        }
+        vector<int> res(mxTime+1, -1);
         for(int i = 0; i < n; i++)
         {
-            for(int j = arr[i].dead - 1; j >= 0; j--)
+            int availSlot = find(parent, arr[i].dead);
+            if(availSlot > 0)
             {
-                if(res[j] == -1)
-                {
-                    res[j] = i;
-                    break;
-                }
+                parent[availSlot] = availSlot-1;
+                res[availSlot] = i;
             }
         }
         int cnt = 0;
         int pro = 0;
-        for(int i = 0; i< mxTime; i++)
+        for(int i = 1; i<= mxTime; i++)
         {
             if(res[i] != -1)
             {
