@@ -1,33 +1,34 @@
 class Solution {
 public:
-    bool DFS(int u, vector<int> adj[], vector<bool> &visited, vector<bool> &cycle)
-    {
-        visited[u] = true;
-        cycle[u] = true;
-        for(auto x : adj[u])
-        {
-            if(!visited[x])
-            {
-                if(DFS(x, adj, visited, cycle))
-                    return true;
-            }
-            else if(cycle[x])
-                return true;
-        }
-        cycle[u] = false;
-        return false;
-    }
     bool canFinish(int n, vector<vector<int>>& pre) {
         vector<int> adj[n];
+        vector<int> in(n, 0);
         for(auto x : pre)
+        {
+            in[x[0]]++;
             adj[x[1]].push_back(x[0]);
-        vector<bool> visited(n, false);
-        vector<bool> cycle(n, false);
+        }
+        queue<int> q;
         for(int i = 0; i < n; i++)
         {
-            if(!visited[i])
-                if(DFS(i, adj, visited, cycle))
-                    return false;
+            if(in[i] == 0)
+                q.push(i);
+        }
+        while(!q.empty())
+        {
+            int t = q.front();
+            q.pop();
+            for(auto x : adj[t])
+            {
+                in[x]--;
+                if(in[x] == 0)
+                    q.push(x);
+            }
+        }
+        for(int i = 0; i < n; i++)
+        {
+            if(in[i] != 0)
+                return false;
         }
         return true;
     }
