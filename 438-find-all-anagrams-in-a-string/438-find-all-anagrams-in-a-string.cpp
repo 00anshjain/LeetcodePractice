@@ -3,8 +3,11 @@ public:
     vector<int> findAnagrams(string s, string p) {
         if(p.size() > s.size())
             return {};
-        vector<int> pArr(26, 0);
-        vector<int> sArr(26, 0);
+        int pArr[26] = {0};
+        int sArr[26] = {0};
+        
+        // vector<int> pArr(26, 0);
+        // vector<int> sArr(26, 0);
         int psize = p.size();
         int n = s.size();
         for(int i = 0; i < psize; i++)
@@ -13,16 +16,39 @@ public:
             sArr[s[i]-'a']++;
         }
         vector<int> res;
-        if(pArr == sArr)
+        // if(pArr == sArr)
+        bool flag = true;
+        for(int i = 0; i < 26; i++)
+        {
+            if(pArr[i] != sArr[i])
+            {
+                flag = false;
+                break;
+            }
+        }
+        if(flag)
             res.push_back(0);
         int i = 0;
         for(int j = psize; j < n; j++)
         {
+            flag = true;
             sArr[s[j]-'a']++;
             sArr[s[i]-'a']--;
             i++;
-            if(pArr == sArr)
+            bool flag = true;
+            for(int i = 0; i < 26; i++)
+            {
+                if(pArr[i] != sArr[i])
+                {
+                    flag = false;
+                    break;
+                }
+            }
+            if(flag)
                 res.push_back(i);
+
+            // if(pArr == sArr)
+            //     res.push_back(i);
         }
         return res;
         
