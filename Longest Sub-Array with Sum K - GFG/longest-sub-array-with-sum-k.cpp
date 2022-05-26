@@ -7,36 +7,30 @@ using namespace std;
 
 class Solution{
     public:
-    int lenOfLongSubarr(int arr[], int n, int k) 
-    { 
-        int prefix[n];
-        int mx = 0;
-        prefix[0] = arr[0];
-        for(int i = 1; i < n; i++)
-        {
-            prefix[i] = arr[i] + prefix[i-1];
-            // if(prefix[i] == k)
-            //     mx = max(mx, i+1);
-        }
+    int lenOfLongSubarr(int arr[],  int n, int k) 
+    {
+        int sum = 0, res = 0;
         unordered_map<int, int> mp;
-        // prefix[0] = 0;
         for(int i = 0; i < n; i++)
         {
-            int sumReqd = prefix[i] - k;
-            if(prefix[i] == k)
+            sum += arr[i];
+            if(sum - k == 0 || mp.find(sum - k) != mp.end())
             {
-                mx = max(mx, i+1);
+                if(sum - k == 0)
+                {
+                    res = max(res, i+1);
+                }
+                else
+                {
+                    res = max(res, i - mp[sum-k]);
+                }
             }
-            else if(mp.find(sumReqd) != mp.end())
+            if(mp.find(sum) == mp.end())
             {
-                mx = max(mx, i - mp[sumReqd]);
-            }
-            if(mp.find(prefix[i]) == mp.end())
-            {
-                mp[prefix[i]] = i;
+                mp[sum] = i;
             }
         }
-        return mx;
+        return res;
         // Complete the function
     } 
 
