@@ -1,50 +1,64 @@
 class Solution {
 public:
-    string minWindow(string s, string p) {
-        unordered_map<char, int> mp;
-        // unordered_set<char> st;
-        for(auto c : p)
+    bool isCheck(unordered_map<char, int> &tmp, unordered_map<char, int> &smp)
+    {
+        for(auto x : tmp)
         {
-            mp[c]++;
-            // st.insert(c);
+            if(smp[x.first] < x.second)
+                return false;
         }
-        int n = s.size();
-        int k = p.size();
-        if(k > n)
-            return "";
-        string ans = "";
-        int ans_sz = INT_MAX;
-        int j = 0;
-        int matched = 0;
+        return true;
+    }
+    string minWindow(string s, string t) {
+        int m = s.size(), n = t.size();
+        unordered_map<char, int> tmp, smp;
+        // string ans = "";
+        int begin = -1, end = -1;
+        int res = INT_MAX;
         for(int i = 0; i < n; i++)
         {
-            if(mp.find(s[i]) != mp.end())
+            tmp[t[i]]++;
+            smp[s[i]]++;    
+        }
+        bool flag = false;
+        if(isCheck(tmp, smp))
+        {
+            flag = true;
+            begin = 0;
+            end = n-1;
+            res = n;
+        }
+        int i = 0;
+        for(int j = n; j < m; j++)
+        {
+            smp[s[j]]++;
+            // cout<<s[j]<<"   "<<smp[s[j]]<<endl;
+            if(!flag)
             {
-                mp[s[i]]--;
-                if(mp[s[i]]>= 0)
-                    matched++;
-                while(matched == k)
+                if(isCheck(tmp, smp))
+                    flag = true;
+            }
+            if(flag)
+            {
+                while(smp[s[i]] > tmp[s[i]])
                 {
-                    // ans = min(ans, i-j+1);
-                    if(i-j+1 < ans_sz)
-                    {
-                        ans_sz = i-j+1;
-                        ans = s.substr(j, i-j+1);
-                    }
-                    // j++;
-                    if(mp.find(s[j]) != mp.end())
-                    {
-                        mp[s[j]]++;
-                        if(mp[s[j]] > 0)
-                            matched--;
-                    }
-                    j++;
+                    smp[s[i]]--;
+                    i++;
+                }
+                // cout<<smp[s[i]]<<" "<<tmp[s[i]]<<" "<<i<<" "<<j<<" "<<res<<endl;
+                if(res > j-i+1)
+                {
+                    res = j-i+1;
+                    begin = i;
+                    end = j;
                 }
             }
+            // j++;
         }
-        // if(ans == INT_MAX)
-        //     return "-1";
-        return ans; 
+        // cout<<res<<endl;
+        if(begin == -1)
+            return "";
+        return s.substr(begin, res);
         
     }
 };
