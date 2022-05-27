@@ -1,27 +1,53 @@
 class Solution {
 public:
-    int longestSubstring(string s, int k) {
-        unordered_map<char, int> mp;
-        if(s == "")
-            return 0;
+    int maxUnq(string &s)
+    {
+        vector<bool> taken(26, false);
+        int mx = 0;
         for(auto c : s)
-            mp[c]++;
-        int ans = 0;
-        int i = -1, n = s.size();
-        for(int j = 0; j < n; j++)
         {
-            if(mp[s[j]] < k)
+            if(!taken[c-'a'])
             {
-                ans = max(ans, longestSubstring(s.substr(i+1, j-i-1), k));
-                i = j;
+                mx++;
+                taken[c-'a'] = true;
             }
         }
-        if(i == -1)
-            ans = max(ans, n-i-1);
-        else
-            ans = max(ans, longestSubstring(s.substr(i+1, n-i-1), k));
-        // cout<<ans<<" "<<s<<"  "<<n<<" "<<i<<endl;
-        // ans = max(ans, n-i-1);
+        return mx;
+    }
+    int longestSubstring(string s, int k) {
+        int maxUnique = maxUnq(s); 
+        int ans = 0, n = s.size();
+        for(int currUnq = 1; currUnq <= maxUnique; currUnq++)
+        {
+            int j = 0, i = 0, unq = 0, kGreater = 0;
+            unordered_map<char, int> mp;
+            while(j < n)
+            {
+                mp[s[j]]++;
+                if(mp[s[j]] == 1)
+                {
+                    unq++;
+                }
+                if(mp[s[j]] == k)
+                    kGreater++;
+                while(unq > currUnq)
+                {
+                    
+                    if(mp[s[i]] == k)
+                        kGreater--;
+                    mp[s[i]]--;
+                    if(mp[s[i]] == 0)
+                        unq--;
+                    i++;
+                    
+                }
+                if(kGreater == unq)
+                {
+                    ans = max(ans, j-i+1);
+                }
+                j++;
+            }
+        }
         return ans;
     }
 };
