@@ -14,24 +14,23 @@ class Solution{
         ll ans = 0;
         if(n <= 2)
             return 0;
-        vector<int> leftBiggest(n), rightBiggest(n);
-        leftBiggest[0] = 0;
+        vector<int> maxL(n), maxR(n);
+        maxL[0] = arr[0];
         for(int i = 1; i < n; i++)
         {
-            leftBiggest[i] = max(leftBiggest[i-1], arr[i-1]);
+            maxL[i] = max(maxL[i-1], arr[i]);
         }
-        rightBiggest[n-1] = 0;
+        maxR[n-1] = arr[n-1];
         for(int i = n-2; i >= 0; i--)
         {
-            rightBiggest[i] = max(rightBiggest[i+1], arr[i+1]);
+            maxR[i] = max(maxR[i+1], arr[i]);
         }
         // for(int i = 0; i < n; i++)
-        //     cout<<rightBiggest[i]<<" ";
+        //     cout<<maxR[i]<<" ";
         // cout<<endl;
         for(int i = 0; i < n; i++)
         {
-            ll ht = (min(leftBiggest[i], rightBiggest[i]));
-            ll water = ht - arr[i];
+            ll water = min(maxL[i], maxR[i]) - arr[i];
             if(water > 0)
                 ans += water;
             // cout<<ht<<endl;
