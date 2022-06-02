@@ -104,18 +104,18 @@ class Solution
     public:
     //Function to return a list of nodes visible from the top view 
     //from left to right in Binary Tree.
-    int leftmax, rightmax;
-    void topViewUtil(Node* root, unordered_map<int, pair<int, int>> &mp, int level, int depth)
+    // int leftmax, rightmax;
+    void topViewUtil(Node* root, map<int, pair<int, int>> &mp, int level, int depth)
     {
         if(!root)
             return;
         if(mp.find(level) == mp.end())
         {
             mp[level] = {depth, root->data};
-            if(level < leftmax)
-                leftmax = level;
-            if(level > rightmax)
-                rightmax = level;
+            // if(level < leftmax)
+            //     leftmax = level;
+            // if(level > rightmax)
+            //     rightmax = level;
         }
         else
         {
@@ -130,15 +130,15 @@ class Solution
     }
     vector<int> topView(Node *root)
     {
-        leftmax = INT_MAX;
-        rightmax = INT_MIN;
-        unordered_map<int, pair<int, int>> mp;
+        // leftmax = INT_MAX;
+        // rightmax = INT_MIN;
+        map<int, pair<int, int>> mp;
         topViewUtil(root, mp, 0, 0);
         vector<int> ans;
-        while(leftmax <= rightmax)
+        for(auto x : mp)
         {
-            ans.push_back(mp[leftmax].second);
-            leftmax++;
+            ans.push_back(x.second.second);
+            // leftmax++;
         }
         return ans;
         //Your code here
