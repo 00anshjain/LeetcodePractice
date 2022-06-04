@@ -1,12 +1,13 @@
 class Solution {
 public:
     unordered_set<string> hasFormed;
+    int mnSize;
     bool canForm(string w, unordered_set<string> &dict)
     {
         if(hasFormed.count(w))
             return true;
         int n = w.size();
-        for(int i = 1; i < n; i++)
+        for(int i = mnSize; i < n-mnSize+1; i++)
         {
             string left = w.substr(0, i);
             string right = w.substr(i);
@@ -22,7 +23,17 @@ public:
         return false;
     }
     vector<string> findAllConcatenatedWordsInADict(vector<string>& words) {
-        unordered_set<string> dict(words.begin(), words.end());
+        // unordered_set<string> dict(words.begin(), words.end());
+        unordered_set<string> dict;
+        mnSize = INT_MAX;
+        for(auto x : words)
+        {
+            int k = x.size();
+            if(k == 0)
+                continue;
+            dict.insert(x);
+            mnSize = min(mnSize, k);
+        }
         vector<string> res;
         for(string w : words)
         {
