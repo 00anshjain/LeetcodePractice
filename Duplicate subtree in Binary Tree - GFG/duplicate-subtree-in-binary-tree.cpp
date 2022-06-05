@@ -92,37 +92,32 @@ class Solution {
   public:
     /*This function returns true if the tree contains 
     a duplicate subtree of size 2 or more else returns false*/
-    bool check(Node* root1, Node* root2)
+    unordered_map<string, int> mp;
+    string helper(Node* root)
     {
-        if(!root1 && !root2)
-            return true;
-        if(!root1 || !root2)
-            return false;
-        if(root1->data != root2->data)
-            return false;
-        return check(root1->left, root2->left) && check(root1->right, root2->right);
-        // if(!root)
-    }
-    bool DFS(unordered_map<int, vector<Node*>> &mp, Node* root)
-    {
-        if(!root)
-            return false;
+        string s = "";
+        if(root == NULL)
+            return "$";
         if(!root->left && !root->right)
-            return false;
-        if(mp.find(root->data) != mp.end())
         {
-            for(auto x : mp[root->data])
-            if(check(x, root))
-                return true;
-        }
-        // else
-            mp[root->data].push_back(root);
-        if(DFS(mp, root->left) || DFS(mp, root->right))
-            return true;
+            s = to_string(root->data);
+            return s;
+        }    
+        s = to_string(root->data);
+        s += helper(root->left);
+        s += helper(root->right);
+        mp[s]++;
+        return s;
     }
     int dupSub(Node *root) {
-        unordered_map<int, vector<Node*>> mp;
-        return DFS(mp, root);
+        mp.clear();
+        helper(root);
+        for(auto itr = mp.begin(); itr != mp.end(); itr++)
+        {
+            if(itr->second > 1)
+                return true;
+        }
+        return false;
          // code here
     }
 };
