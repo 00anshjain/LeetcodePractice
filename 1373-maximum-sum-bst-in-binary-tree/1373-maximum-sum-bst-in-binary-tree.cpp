@@ -9,51 +9,54 @@
  *     TreeNode(int x, TreeNode *left, TreeNode *right) : val(x), left(left), right(right) {}
  * };
  */
+
+//copied from discussion just to check time
 class Solution {
 public:
-    int maxsum=0;
-    bool isBST(TreeNode*root,int mini,int maxi)
+    
+    int ans=0;
+    
+    bool vbst(TreeNode *t,int l,int r)
     {
-        if(root==nullptr)
-            return true;
-        if(root->val<=mini||root->val>=maxi)
-            return false;
-        return isBST(root->left,mini,root->val) && isBST(root->right,root->val,maxi);
-        // return left&&right;
+        if(!t)return 1;
+        
+        if(t->val<=l or t->val>=r)return 0;
+    
+        return vbst(t->left,l,t->val) and vbst(t->right,t->val,r);
     }
     
-    
-    int sumBST(TreeNode*root)
+    int maxSum(TreeNode* t,int &ma)
     {
-        if(!root->left && !root->right)
-        {
-            if(root->val > 0)
-                maxsum = root->val;
-            return root->val;
+        if(!t)return 0;
+        
+        int l=maxSum(t->left,ma);
+        int r=maxSum(t->right,ma);
+        int v=l+r+t->val;
+        ma=max(ma,v);
+        
+        return v;
+    }
+    
+    void solve(TreeNode* t)
+    {
+        if(!t)return;
+        int sum=0;
+        
+        if(vbst(t,INT_MIN,INT_MAX))
+        {   
+            maxSum(t,sum);
+            ans=max(ans,sum);
+            return ;
         }
-        int lsum = 0, rsum = 0;
-        if(root->left)
-            lsum = sumBST(root->left);
-        if(root->right)
-            rsum = sumBST(root->right);
-        // cout<<root->val<<"  "<<lsum<<"  "<<rsum<<endl;
-        int ans = lsum + rsum + root->val;
-        if(maxsum < ans)
-            maxsum = ans;
-        return (lsum + rsum + root->val);
+        
+        solve(t->left),solve(t->right);
     }
+    
     int maxSumBST(TreeNode* root) {
-        if(root==nullptr)
-            return 0;
-        if(isBST(root,INT_MIN,INT_MAX))
-        {
-            // cout<<"Yes"<<endl;
-            int k = sumBST(root);
-            if(k < 0)
-                return 0;
-            return maxsum;
-        }
-        // return 0;
-        return max(maxSumBST(root->left),maxSumBST(root->right));
+        
+        if(!root)return 0;
+        
+        solve(root);
+        return ans;
     }
 };
