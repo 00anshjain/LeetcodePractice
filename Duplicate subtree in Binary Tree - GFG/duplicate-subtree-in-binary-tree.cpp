@@ -92,32 +92,31 @@ class Solution {
   public:
     /*This function returns true if the tree contains 
     a duplicate subtree of size 2 or more else returns false*/
-    unordered_map<string, int> mp;
-    string helper(Node* root)
+    bool flag = false;
+    string getString(Node* root, unordered_map<string, int>& mp)
     {
-        string s = "";
-        if(root == NULL)
+        if(!root)
             return "$";
         if(!root->left && !root->right)
-        {
-            s = to_string(root->data);
-            return s;
-        }    
-        s = to_string(root->data);
-        s += helper(root->left);
-        s += helper(root->right);
+            return to_string(root->data);
+        string s = to_string(root->data);
+        if(flag)
+            return "";
+        s += getString(root->left, mp);
+        if(flag)
+            return "";
+        s += getString(root->right, mp);
         mp[s]++;
+        if(mp[s] > 1)
+            flag = true;
         return s;
     }
     int dupSub(Node *root) {
-        mp.clear();
-        helper(root);
-        for(auto itr = mp.begin(); itr != mp.end(); itr++)
-        {
-            if(itr->second > 1)
-                return true;
-        }
-        return false;
+        string s = "";
+        flag = false;
+        unordered_map<string, int> mp;
+        getString(root, mp);
+        return (int)flag;
          // code here
     }
 };
