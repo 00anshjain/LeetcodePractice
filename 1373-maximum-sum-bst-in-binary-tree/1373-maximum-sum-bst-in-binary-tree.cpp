@@ -18,15 +18,14 @@ public:
             return true;
         if(root->val<=mini||root->val>=maxi)
             return false;
-        bool left = isBST(root->left,mini,root->val);
-        bool right = isBST(root->right,root->val,maxi);
-        return left&&right;
+        return isBST(root->left,mini,root->val) && isBST(root->right,root->val,maxi);
+        // return left&&right;
     }
     
     
     int sumBST(TreeNode*root)
     {
-        if(root->left==nullptr&&root->right==nullptr)
+        if(!root->left && !root->right)
         {
             if(root->val > 0)
                 maxsum = root->val;
