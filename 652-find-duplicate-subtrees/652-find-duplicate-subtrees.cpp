@@ -11,28 +11,30 @@
  */
 class Solution {
 public:
-    string getDup(TreeNode* root, unordered_map<string, vector<TreeNode*>> &mp)
+    string getDup(TreeNode* root, unordered_map<string, int> &mp, vector<TreeNode*> &res)
     {
         if(root == NULL)
             return "";
         string s = "(";
-        s += getDup(root->left, mp);
+        s += getDup(root->left, mp, res);
         s += to_string(root->val);
-        s += getDup(root->right, mp);
+        s += getDup(root->right, mp, res);
         s += ")";
-        mp[s].push_back(root);
+        mp[s]++;
+        if(mp[s] == 2)
+            res.push_back(root);
         return s;
 }
 
     vector<TreeNode*> findDuplicateSubtrees(TreeNode* root) {
-        unordered_map<string, vector<TreeNode*>> mp;
-        getDup(root, mp);
+        unordered_map<string, int> mp;
         vector<TreeNode*> res;
-        for(auto itr : mp)
-        {
-            if(itr.second.size() > 1)
-                res.push_back((itr.second)[0]);
-        }
+        getDup(root, mp, res);
+        // for(auto itr : mp)
+        // {
+        //     if(itr.second.size() > 1)
+        //         res.push_back((itr.second)[0]);
+        // }
         return res;
     }
 };
