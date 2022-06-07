@@ -9,7 +9,7 @@ public:
         priority_queue<int> pq;
         int day = 0;
         // int cnt = 0;
-        for(auto x : c)
+        for(auto &x : c)
         {
             // cout<<x[0]<<"  "<<x[1]<<endl;
             if((day + x[0]) <= x[1])
