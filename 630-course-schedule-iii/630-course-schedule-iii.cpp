@@ -1,6 +1,6 @@
 class Solution {
 public:
-    static bool comp(vector<int>& a, vector<int>& b)
+    static bool comp(const vector<int>& a, const vector<int>& b)
     {
         return a[1] < b[1];
     }
