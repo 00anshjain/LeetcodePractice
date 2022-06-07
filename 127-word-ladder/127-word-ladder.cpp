@@ -4,39 +4,37 @@ public:
         unordered_set<string> dict(wordList.begin(), wordList.end());
         if(dict.find(endWord) == dict.end())
             return 0;
-        if(beginWord == endWord)
-            return 0;
         queue<string> q;
         q.push(beginWord);
-        int t = 1;
+        int cnt = 0;
         while(!q.empty())
         {
             int n = q.size();
+            cnt++;
             while(n--)
             {
-                string word = q.front();
+                string w = q.front();
+                // q.pop();
                 q.pop();
-                for(int i = 0; i < word.size(); i++)
+                for(int i = 0; i < w.size(); i++)
                 {
-                    char k = word[i];
+                    char k = w[i];
                     for(char j = 'a'; j <= 'z'; j++)
                     {
                         if(j == k)
                             continue;
-                        word[i] = j;
-                        if(dict.find(word) != dict.end())
+                        w[i] = j;
+                        if(dict.find(w) != dict.end())
                         {
-                            if(word == endWord)
-                                return t + 1;
-                            q.push(word);
-                            auto itr = dict.find(word);
-                            dict.erase(itr);
+                            if(w == endWord)
+                                return cnt+1;
+                            q.push(w);
+                            dict.erase(dict.find(w));
                         }
                     }
-                    word[i] = k;
+                    w[i] = k;
                 }
             }
-            t++;
         }
         return 0;
     }
