@@ -7,15 +7,15 @@ class Solution
 {
 	public:
 	//Function to return list containing vertices in Topological order. 
-	void DFS(int u, vector<bool> &visited, stack<int>& st, vector<int> adj[])
+	void DFS(int u, vector<int> adj[], stack<int> &st, vector<bool> &visited)
 	{
 	    visited[u] = true;
 	    for(auto x : adj[u])
-	    {
-	        if(!visited[x])
-	            DFS(x, visited, st, adj);
-	    }
-	    st.push(u);
+       {
+           if(!visited[x])
+                DFS(x, adj, st, visited);
+       }
+       st.push(u);
 	}
 	vector<int> topoSort(int V, vector<int> adj[]) 
 	{
@@ -24,17 +24,15 @@ class Solution
 	    for(int i = 0; i < V; i++)
 	    {
 	        if(!visited[i])
-	        {
-	            DFS(i, visited, st, adj);
-	        }
+	            DFS(i, adj, st, visited);
 	    }
-	    vector<int> ans;
+	    vector<int> topo;
 	    while(!st.empty())
 	    {
-	        ans.push_back(st.top());
+	        topo.push_back(st.top());
 	        st.pop();
 	    }
-	    return ans;
+	    return topo;
 	    // code here
 	}
 };
