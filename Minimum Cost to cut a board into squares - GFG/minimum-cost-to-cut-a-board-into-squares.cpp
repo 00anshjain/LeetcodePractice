@@ -18,30 +18,30 @@ public:
         //hpieces -> no. of piences for horizontal cut
         //hpieces will increase with vertical cut
         // vertical cut-> no of pieces of hpieces will be used, it will increase v cut piece by 1
-        M = X.size();
-        N = Y.size();
+        // M = X.size();
+        // N = Y.size();
         while(i < M && j < N)
         {
             if(X[i] >= Y[j])
             {
-                cost += X[i++]*xpieces;
-                ypieces++;
+                cost += X[i++]*ypieces;
+                xpieces++;
             }
             else
             {
-                cost += Y[j++]*ypieces;
-                xpieces++;
+                cost += Y[j++]*xpieces;
+                ypieces++;
             }
         }
         while(i<M)
         {
-            cost += X[i++]*xpieces;
-            ypieces++;
+            cost += X[i++]*ypieces;
+            xpieces++;
         }
         while(j < N)
         {
-            cost += Y[j++]*ypieces;
-            xpieces++;
+            cost += Y[j++]*xpieces;
+            ypieces++;
         }
         return cost;
         
