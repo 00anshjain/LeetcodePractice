@@ -32,20 +32,22 @@ class Solution
         vector<int> dist(n, INT_MAX);
         vector<int> parent(n, -1);
         dist[0] = 0;
-        int cnt = 0;
+        // int cnt = 0;
         int ans = 0;
-        while(cnt <= n-1)
+        //intinially no edge coming for i = 0
+        //only vertex 0 coming from findmin function
+        for(int i = 0; i <= n-1; i++)
         {
             int u = findMin(visited, dist);
-            if(visited[u])
-                continue;
+            // if(visited[u])
+            //     continue;
             visited[u] = true;
             // cout<<" "<<parent[u]<<" "<<dist[u]<<endl;
             ans += dist[u];
-            cnt++;
+            // cnt++;
             for(auto x : adj[u])
             {
-                if(dist[x[0]] > x[1])
+                if(!visited[x[0]] && dist[x[0]] > x[1])
                 {
                     dist[x[0]] = x[1];
                     parent[x[0]] = u; 
