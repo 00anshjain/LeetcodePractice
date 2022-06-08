@@ -8,45 +8,44 @@ using namespace std;
 //User function Template for C++
 class Solution{
     public:
-    int mod = 1e9+7;
     typedef long long ll;
+    int mod = 1e9+7;
     long long int findMaxProduct(vector<int>&a, int n){
         //Write your code here
         ll ans = 1;
         // priority_queue<int, vector<int>, greater<int>> p1;
-        int negCount = 0, zeroCount = 0;
+        ll mxEle = INT_MIN;
         ll neg = INT_MIN;
         // bool hasZero = false;
-        for(long long x : a)
+        bool hasOne = false;
+        for(auto x : a)
         {
             if(x == 0)
             {
-                zeroCount++;
+                // hasZero = true;
                 continue;
             }
             ans *= x;
             ans %= mod;
-            if(x < 0)
-            {
-                negCount++;
-                if(x > neg)
-                    neg = x;
-            }
+            if(x < 0 && x > neg)
+                neg = x;
+            if(x == 1)
+                hasOne = true;
         }
-        if(zeroCount == n)
-            return 0;
-        if(n == 1)
+        if(ans > 0 && ans != 1)
             return ans;
-        if(ans < 0)
-        {
-            if(negCount == 1 && negCount + zeroCount == n)
-                return 0;
+        else if(ans < 0 && a.size() > 1)
             ans /= neg;
+        if(ans == 1)
+        {
+            if(hasOne)
+                return ans;
+            else
+                return 0;
         }
         return ans;
     }
 };
-
 
 
 // { Driver Code Starts.
