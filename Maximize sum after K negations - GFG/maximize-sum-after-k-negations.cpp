@@ -20,6 +20,8 @@ class Solution{
         //     i == n-1;
         if(k > 0 && k%2 == 1)
         {
+            if(i == n)
+                mnidx = n-1;
             if(arr[i] == 0)
                 mnidx = i;
             else if(arr[i] > 0 && i == 0)
