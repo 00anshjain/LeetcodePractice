@@ -32,7 +32,7 @@ public:
         // cout<<sum1<<" "<<sum2<<" "<<sum3<<endl;
         int cnt = 0;
         int i = 0, j = 0, k = 0;
-        while(!(sum1 == sum2 && sum2 == sum3))
+        while(sum1 != sum2 || sum2 != sum3)
         {
             if(sum1 >= sum2 && sum1 >= sum3)
             {
