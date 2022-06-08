@@ -9,44 +9,32 @@ class Solution
 {
 	public:
 	//Function to find sum of weights of edges of the Minimum Spanning Tree.
-	
     int spanningTree(int n, vector<vector<int>> adj[])
     {
-        vector<bool> visited(n, false);
+        // int dist = 0;
+        int curr = 0;
         vector<int> dist(n, INT_MAX);
-        vector<int> parent(n, -1);
         dist[0] = 0;
-        // int cnt = 0;
         int ans = 0;
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-        pq.push({0, 0});
-        //intinially no edge coming for i = 0
-        //only vertex 0 coming from findmin function
-        for(int i = 0; i <= n-1; i++)
+        vector<bool> visited(n, false);
+        while(1)
         {
-            int u = pq.top().second;
-            int d = dist[u];
-            pq.pop();
-            if(visited[u])
+            visited[curr] = true;
+            for(auto x : adj[curr])
             {
-                i--;
-                continue;
+                if(visited[x[0]])
+                    continue;
+                dist[x[0]] = min(dist[x[0]], x[1]);
             }
-            visited[u] = true;
-            // cout<<" "<<parent[u]<<" "<<dist[u]<<endl;
-            ans += dist[u];
-            // cnt++;
-            for(auto x : adj[u])
-            {
-                if(!visited[x[0]] && dist[x[0]] > x[1])
-                {
-                    dist[x[0]] = x[1];
-                    pq.push({dist[x[0]], x[0]});
-                    parent[x[0]] = u; 
-                }
-            }
+            curr = min_element(dist.begin(), dist.end()) - dist.begin();
+            if(dist[curr] == INT_MAX)
+                return ans;
+            // cout<<curr<<" "<<dist[curr]<<endl;
+            ans += dist[curr];
+            dist[curr] = INT_MAX;
         }
-        return ans;
+        return 0;
+        // code here
     }
 };
 
