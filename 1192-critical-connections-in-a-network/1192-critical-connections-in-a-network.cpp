@@ -13,12 +13,12 @@ public:
             {
                 DFS(v, dis, low, u, adj, res);
                 low[u] = min(low[u], low[v]);
-                if(dis[u] < low[v])
+                if(dis[u] < low[v]) // mtlb iske paas aur koi rasta nhi h aage jane ka mere alawa
                     res.push_back({u, v});
             }
             else
             {
-                low[u] = min(low[u], dis[v]);
+                low[u] = min(low[u], low[v]);
             }
         }
         // inStack[u] = false;
