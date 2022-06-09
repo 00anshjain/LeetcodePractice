@@ -4,48 +4,50 @@ using namespace std;
 
 
  // } Driver Code Ends
-//Function to determine if graph can be coloured with at most M colours such
-//that no two adjacent vertices of graph are coloured with same colour.
-bool isSafe(bool graph[101][101], int m, int color[], int size, int index)
+// Function to determine if graph can be coloured with at most M colours such
+// that no two adjacent vertices of graph are coloured with same colour.
+bool isSafe(int u, int c, bool graph[101][101], vector<int>& color, int n)
 {
-    // issafe edge hai ya nahi or hai to unka color same hai ki nahi
-    for(int i = 0; i < index; i++)
+    for(int i = 0; i < n; i++)
     {
-        if(graph[i][index] == 1 &&  color[i] == color[index])
+        // if(i == u)
+        //     continue;
+        if(graph[u][i] && color[i] == c)
             return false;
     }
     return true;
 }
-
-
-bool fnc(bool graph[101][101], int m, int size, int index, int color[])
+bool getColored(int u, bool graph[101][101], int m, int n, vector<int>& color)
 {
-    // base case jab index = size to it means ki vo waha tak phouch sakta haasdfi
-    if(index == size)
+    if(u == n)
         return true;
-        
-    for(int i = 1; i <= m; i++)
+    for(int i = 0; i < m; i++)
     {
-        color[index] = i;
-        
-        if(isSafe(graph, m, color, size, index))
+        if(isSafe(u, i, graph, color, n))
         {
-            if(fnc(graph, m, size, index+1, color))
+            color[u] = i;
+            if(getColored(u+1, graph, m, n, color))
                 return true;
         }
-            
     }
+    color[u] = -1;
     return false;
 }
-
-
-bool graphColoring(bool graph[101][101], int m, int v)
-{
+bool graphColoring(bool graph[101][101], int m, int n) {
+    vector<int> color(n, -1);
+    // for(int i = 1; i <= n; i++)
+    // {
+        // if(color[i] == -1)
+        // {
+            // if(!getColored(i, graph, m, n, color))
+            //     return false;
+        // }
+    // }
+    return getColored(0, graph, m, n, color);
+    // return true;
     // your code here
-    int color[v];
-    memset(color, 0, sizeof(color));
-    return fnc(graph, m, v, 0, color);
 }
+
 // { Driver Code Starts.
 
 int main() {
