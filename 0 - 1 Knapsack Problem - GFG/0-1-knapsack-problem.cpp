@@ -8,24 +8,31 @@ class Solution
 {
     public:
     //Function to return max value that can be put in knapsack of capacity W.
-    int KnapSack(int W, int wt[], int val[], int n, vector<vector<int>>& dp)
-    {
-        if(W == 0 || n == 0)
-            return 0;
-        if(dp[W][n] != -1)
-            return dp[W][n];
-        if(wt[n-1] <= W)
-        {
-            return dp[W][n]= max(KnapSack(W-wt[n-1], wt, val, n-1, dp) + val[n-1], KnapSack(W, wt, val, n-1, dp));
-        }
-        return  dp[W][n] = KnapSack(W, wt, val, n-1, dp);
-    }
-    int knapSack(int W, int wt[], int val[], int n) 
+    int knapSack(int w, int wt[], int val[], int n) 
     { 
-        vector<vector<int>> dp(W+1, vector<int>(n+1, -1));
-        return KnapSack(W, wt, val, n, dp);
-       // Your code here
+        int dp[n+1][w+1];
+        for(int i = 0; i <= n; i++)
+        {
+            for(int j = 0; j <= w; j++)
+            {
+                if(i == 0 || j == 0)
+                    dp[i][j] = 0;
+            }
+        }
+        for(int i = 1; i < n+1; i++)
+        {
+            for(int j = 1; j < w+1; j++)
+            {
+                if(j >= wt[i-1])
+                    dp[i][j] = max(dp[i-1][j], dp[i-1][j-wt[i-1]] + val[i-1]);
+                else
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[n][w];
+        
     }
+    
 };
 
 // { Driver Code Starts.
