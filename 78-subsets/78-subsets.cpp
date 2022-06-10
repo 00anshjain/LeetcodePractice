@@ -1,22 +1,22 @@
 class Solution {
 public:
-    void helper(int i, vector<int>& nums, vector<vector<int>>& ans, vector<int> curr)
+    void recur(vector<int> &nums, int n, vector<int> arr, vector<vector<int>> &res)
     {
-        if(i == nums.size())
+        if(n == 0)
         {
-            ans.push_back(curr);
+            // sort(arr.begin(), arr.end());
+            res.push_back(arr);
             return;
         }
-        helper(i+1, nums, ans, curr);
-        curr.push_back(nums[i]);
-        helper(i+1, nums, ans, curr);
+        recur(nums, n-1, arr, res);
+        arr.push_back(nums[n-1]);
+        recur(nums, n-1, arr, res);
+        
     }
     vector<vector<int>> subsets(vector<int>& nums) {
-        int i = 0;
-        vector<vector<int>> ans;
-        vector<int> curr;
-        helper(0, nums, ans, curr);
-        return ans;
-        
+        vector<int> arr;
+        vector<vector<int>> res;
+        recur(nums, nums.size(), arr, res);
+        return res;
     }
 };
