@@ -10,21 +10,22 @@ class Solution{
 	    // Your code goes here
 	    int sum = accumulate(arr, arr+n, 0);
 	    int t = sum/2;
-	    bool dp[n+1][t+1];
+	    bool dp[2][t+1];
 	    memset(dp, false, sizeof(dp));
-	    for(int i = 0; i <= n; i++)
-	        dp[i][0] = true;
+	   // for(int i = 0; i <= n; i++)
+	        dp[0][0] = true;
+	        dp[1][0] = true;
 	    for(int i = 1; i <= n; i++)
 	    {
 	        for(int j = 1; j <= t; j++)
 	        {
 	            if(j >= arr[i-1])
-	                dp[i][j] = (dp[i-1][j] || dp[i-1][j-arr[i-1]]);
+	                dp[i%2][j] = (dp[(i-1)%2][j] || dp[(i-1)%2][j-arr[i-1]]);
 	            else
-	                dp[i][j] = dp[i-1][j];
+	                dp[i%2][j] = dp[(i-1)%2][j];
 	        }
 	    }
-	    while(!dp[n][t])
+	    while(!dp[n%2][t])
 	        t--;
 	    return sum - t - t;
 	    
