@@ -6,28 +6,35 @@ using namespace std;
 class Solution{
 
   public:
+    int sum;
+    int recur(int arr[], int n, int t, int currSum, vector<vector<int>>& dp)
+    {
+        // if(currSum == 0)
+        //     return sum - t - t;
+        if(n == 0 || currSum == 0)
+        {
+            int k = t - currSum;
+            return (sum - k) - k;
+        }
+        if(dp[n][currSum] != -1)
+            return dp[n][currSum];
+        if(arr[n-1] <= currSum)
+        {
+            return dp[n][currSum] = min(recur(arr, n-1, t, currSum - arr[n-1], dp), recur(arr, n-1, t, currSum, dp));
+        }
+        return dp[n][currSum] = recur(arr, n-1, t, currSum, dp);
+        
+    }
 	int minDifference(int arr[], int n)  { 
 	    // Your code goes here
-	    int sum = accumulate(arr, arr+n, 0);
+	    sum = accumulate(arr, arr+n, 0);
 	    int t = sum/2;
-	    bool dp[2][t+1];
-	    memset(dp, false, sizeof(dp));
-	   // for(int i = 0; i <= n; i++)
-	        dp[0][0] = true;
-	        dp[1][0] = true;
-	    for(int i = 1; i <= n; i++)
-	    {
-	        for(int j = 1; j <= t; j++)
-	        {
-	            if(j >= arr[i-1])
-	                dp[i%2][j] = (dp[(i-1)%2][j] || dp[(i-1)%2][j-arr[i-1]]);
-	            else
-	                dp[i%2][j] = dp[(i-1)%2][j];
-	        }
-	    }
-	    while(!dp[n%2][t])
-	        t--;
-	    return sum - t - t;
+	   // bool dp[n+1][t+1];
+	   vector<vector<int>> dp(n+1, vector<int>(sum/2 + 1, -1));
+	   return recur(arr, n, t, t, dp);
+	   // while(!dp[n][t])
+	   //     t--;
+	   // return sum - t - t;
 	    
 	} 
 };
