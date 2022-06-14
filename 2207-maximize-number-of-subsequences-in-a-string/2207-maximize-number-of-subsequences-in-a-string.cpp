@@ -2,17 +2,21 @@ class Solution {
 public:
     typedef long long ll;
     long long maximumSubsequenceCount(string text, string pattern) {
-        ll res = 0, cnt1 = 0, cnt2 = 0;
-        for (auto & c: text) {   
-            if (c == pattern[1]){
-                res += cnt1;
-                cnt2++;
+        char a = pattern[0], b = pattern[1];
+        ll ans = 0, cnt_a = 0, cnt_b = 0;
+        for(auto c : text)
+        {
+            if(c == b)
+            {
+                ans += cnt_a;
+                cnt_b++;
             }
-            if (c == pattern[0])
-                cnt1++;
+            if(c == a)
+            {
+                cnt_a++;
+            }
+            
         }
-        return res + max(cnt1, cnt2);
-        
-        
+        return ans + max(cnt_a, cnt_b);
     }
 };
