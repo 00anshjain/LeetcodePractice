@@ -29,7 +29,7 @@ public:
             {
                 int v = x.second;
                 int d = x.first;
-                if(!visited[v] && dist[v] > dis_u + d)
+                if(dist[v] > dis_u + d)
                 {
                     dist[v] = d + dis_u;
                     // cout<<dist[u]<<" "<<dist[v] <<" "<<v<<endl;
