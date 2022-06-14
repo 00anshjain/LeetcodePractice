@@ -1,58 +1,50 @@
 class Solution {
 public:
-    int ans = 0, n;
+    int n, ans;
     bool isPalin(string &s)
     {
-        int i = 0, j = s.size() - 1;
-        while(i < j)
+        int k = s.size();
+        if(k <= 1)
+            return true;
+        int i = 0;
+        k--;
+        while(i < k)
         {
-            if(s[i] != s[j])
+            if(s[i] != s[k])
                 return false;
+            k--;
             i++;
-            j--;
         }
         return true;
+        
     }
-    int recur(string &s, int i, int j, vector<vector<int>> &dp)
-    {
-        if(i > j)
-            return 0;
-        if(dp[i][j] != -1)
-            return dp[i][j];
-        if(i == j)
-            return dp[i][j] = 1;
-        if(s[i] == s[j])
-            return dp[i][j] = 2 + recur(s, i+1, j-1, dp);
-        return dp[i][j] = max(recur(s, i+1, j, dp), recur(s, i, j-1, dp));
-    }
-    void func(string &s, int i, string curr, int mask)
+    void recur(int i, string& s1, string& s2, string &s)
     {
         if(i == n)
         {
-            if(!isPalin(curr))
-                return;
-            string p = "";
-            for(int j = 0; j < n; j++)
+            if(isPalin(s1) && isPalin(s2))
             {
-                if(!(mask & (1<<j)))
-                {
-                    p += s[j];
-                }
+                // cout<<s1<<" "<<s2<<endl;
+                
+                ans = max(ans, (int)(s1.size()*s2.size()));
             }
-            int k = curr.size();
-            int sz = p.size();
-            vector<vector<int>> dp(sz + 1, vector<int>(sz+1, -1));
-            ans = max(ans, k * recur(p, 0, sz - 1, dp));
             return;
         }
-        func(s, i+1, curr, mask);
-        func(s, i+1, curr+ s[i], mask | (1<<i));
+        recur(i+1, s1, s2, s);
+        s1.push_back(s[i]);
+        recur(i+1, s1, s2, s);
+        s1.pop_back();
+        s2.push_back(s[i]);
+        recur(i+1, s1, s2, s);
+        s2.pop_back();
+        
+        
     }
     int maxProduct(string s) {
         ans = 0;
         n = s.size();
-        string curr = "";
-        func(s, 0, curr, 0);
+        string s1 = "", s2 = "";
+        recur(0, s1, s2, s);
         return ans;
     }
 };
