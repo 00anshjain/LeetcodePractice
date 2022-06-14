@@ -7,65 +7,67 @@ class Solution
 {
 	public:
 	    struct Node{
-	      char ch;
-	      int freq;
-	      Node* left;
-	      Node* right;
-	      Node(char ch, int freq)
-	      {
-	          this->ch = ch;
-	          this->freq = freq;
-	          left = NULL;
-	          right = NULL;
-	      }
-	      Node(Node* l, Node* r)
-	      {
-	          ch = '$';
-	          freq = l->freq + r->freq;
-	          left = l;
-	          right = r;
-	      }
-	    };
-	    struct compare{
-	        bool operator()(Node* l, Node* r)
+	        char ch;
+	        int freq;
+	        Node* left;
+	        Node* right;
+	        Node(char ch, int freq)
 	        {
-	            return l->freq > r->freq;
+	            this->ch = ch;
+	            this->freq = freq;
+	            left = NULL;
+	            right = NULL;
 	        }
 	    };
-	    void inorder(Node* root, vector<string> &s, string curr)
-	    {
-	        if(!root)
-	            return;
-	        if(root->ch != '$')
-	        {
-	            s.push_back(curr);
-	            return;
-	        }
-	        inorder(root->left, s, curr + '0');
-	        inorder(root->right, s, curr + '1');
-	        
-	    }
-		vector<string> huffmanCodes(string S,vector<int> f,int n)
+
+        // static bool compare(Node* a, Node* b){
+        //     return a.freq < b.freq;
+        // }
+        struct compare{
+            bool operator()(Node* a, Node* b)
+            {
+                return a->freq > b->freq;
+            }
+        };
+        void preorder(Node* root, vector<string> &ans, string s)
+        {
+            if(!root)
+                return;
+            // cout<<root->ch<<endl;
+            if(root->ch != '$')
+            {
+                ans.push_back(s);
+                return;
+            }
+            preorder(root->left, ans, s+'0');
+            preorder(root->right, ans, s+'1');
+        }
+		vector<string> huffmanCodes(string s,vector<int> f,int n)
 		{
 		    priority_queue<Node*, vector<Node*>, compare> pq;
-		    for(int i = 0; i < n; i++)
-		    {
-		        pq.push(new Node(S[i], f[i]));
-		    }
-		    while(pq.size() > 1)
-		    {
-		        Node* l = pq.top();
-		        pq.pop();
-		        Node* r = pq.top();
-		        pq.pop();
-		        Node* node = new Node(l,r);
-		        pq.push(node);
-		    }
-		    string curr = "";
-		    vector<string> s;
-		    inorder(pq.top(), s, curr);
-		    return s;
-		    
+            // priority_queue<Node*, vector<Node*>, greater<int>()> pq;
+            for(int i = 0; i < n; i++)
+            {
+                // Node* temp = new Node(s[i], f[i]);
+                // pq.push(temp);
+                pq.push(new Node(s[i], f[i]));
+            }
+            // cout<<pq.size()<<endl;
+            while(pq.size() > 1)
+            {
+                Node* l = pq.top();
+                pq.pop();
+                Node* r = pq.top();
+                pq.pop();
+                Node* temp = new Node('$', l->freq + r->freq);
+                temp->left = l;
+                temp->right = r;
+                pq.push(temp);
+            }
+            vector<string> ans;
+            // Node* head = pq.top();
+            preorder(pq.top(), ans, "");
+            return ans;
 		    // Code here
 		}
 };
