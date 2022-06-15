@@ -11,26 +11,26 @@ class Solution
 {
     public:
     //Function to find the maximum number of cuts.
-    int maximizeCuts(int n, int x, int y, int z, vector<int> &dp)
-    {
-        if(n == 0)
-            return 0;
-        if(n < 0)
-            return INT_MIN;
-        if(dp[n] != -1)
-            return dp[n];
-        int a = 1 + maximizeCuts(n-x,  x, y, z, dp);
-        int b = 1 + maximizeCuts(n-y, x, y, z, dp);
-        int c = 1 + maximizeCuts(n-z, x, y, z, dp);
-        return dp[n] = max(a, max(b, c));
-    }
     int maximizeTheCuts(int n, int x, int y, int z)
     {
-        vector<int> dp(n+1, -1);
-        int ans = maximizeCuts(n, x, y, z, dp);
-        if (ans < 0)
-            return 0;
-        return ans;
+        int dp[n+1];
+        memset(dp, -1, sizeof(dp));
+        dp[0] = 0;
+        // dp[x] = 1;
+        // dp[y] = 1;
+        // dp[z] = 1;
+        for(int i = 1; i <= n; i++)
+        {
+            int k = dp[i];
+            if(i >= x && dp[i-x] != -1)
+                k = max(k, 1 + dp[i-x]);
+            if(i >= y && dp[i-y] != -1)
+                k = max(k, 1 + dp[i-y]);
+            if(i >= z && dp[i-z] != -1)
+                k = max(k, 1 + dp[i-z]);
+            dp[i] = k;
+        }
+        return dp[n] == -1 ? 0 : dp[n];
         //Your code here
     }
 };
