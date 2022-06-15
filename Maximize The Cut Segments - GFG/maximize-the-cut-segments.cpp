@@ -11,27 +11,30 @@ class Solution
 {
     public:
     //Function to find the maximum number of cuts.
+    int recur(int n, int x, int y, int z, vector<int>& dp)
+    {
+        if(n < 0)
+            return INT_MIN;
+        if(n == 0)
+            return 0;
+        if(dp[n] != -1)
+            return dp[n];
+        int a, b, c;
+        a = recur(n - x, x, y, z, dp);
+        b = recur(n - y, x, y, z, dp);
+        c = recur(n - z, x, y, z, dp);
+        int ans = max(max(a, b), c);
+        if(ans != INT_MIN)
+            return dp[n] = ans + 1;
+        return dp[n] = ans;
+    }
     int maximizeTheCuts(int n, int x, int y, int z)
     {
-        int dp[n+1];
-        memset(dp, -1, sizeof(dp));
-        dp[0] = 0;
-        // dp[x] = 1;
-        // dp[y] = 1;
-        // dp[z] = 1;
-        for(int i = 1; i <= n; i++)
-        {
-            int k = dp[i];
-            if(i >= x && dp[i-x] != -1)
-                k = max(k, 1 + dp[i-x]);
-            if(i >= y && dp[i-y] != -1)
-                k = max(k, 1 + dp[i-y]);
-            if(i >= z && dp[i-z] != -1)
-                k = max(k, 1 + dp[i-z]);
-            dp[i] = k;
-        }
-        return dp[n] == -1 ? 0 : dp[n];
-        //Your code here
+        vector<int> dp(n+1, -1);
+        int k = recur(n, x, y, z, dp);
+        if(k == INT_MIN)
+            return 0;
+        return k;
     }
 };
 
