@@ -9,32 +9,29 @@ class Solution
 {
     public:
     //Function to find length of longest increasing subsequence.
-    int longestSubsequence(int n, int arr[])
+    int recur(int j, int a[], vector<int> &dp)
     {
-        
-        // int n = arr.size();
-        int dp[n+1];
-        // vector<int> dp(n+1, INT_MAX);
-        // memset(dp, INT_MAX, sizeof(dp));
-        for(int i = 1; i <= n; i++)
-            dp[i] = INT_MAX;
-        dp[0] = INT_MIN;
-        // for(auto x : arr)
-        for(int k = 0; k < n; k++)
+        if(j < 0)
+            return 0;
+        if(dp[j] != -1)
+            return dp[j];
+        int ans = 1;
+        for(int i = j-1; i>= 0; i--)
         {
-            int x = arr[k];
-            int i = upper_bound(dp, dp+n+1, x) - dp;
-            // int i = upper_bound(dp.begin(), dp.end(), x) - dp.begin();
-            if(dp[i] > x && dp[i-1] < x)
-                dp[i] = x;
+            if(a[i] < a[j])
+                ans = max(ans, 1 + recur(i, a, dp));
+                
         }
-        int i;
-        for(i = n; i >= 0; i--)
-        {
-            if(dp[i] != INT_MAX)
-                break;
-        }
-        return i;
+        return dp[j] = ans;
+    }
+    int longestSubsequence(int n, int a[])
+    {
+        // vector<vector<int>> dp(n, vector<int>(n, -1));
+        vector<int> dp(n, -1);
+        int ans = 0;
+        for(int i = 0; i < n; i++)
+            ans =  max(ans, recur(i, a, dp));
+        return ans;
        // your code here
     }
 };
