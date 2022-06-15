@@ -15,19 +15,18 @@ public:
         if(r > n)
             return 0;
         r = min(r, n-r);
-        ll dp[n+1][r+1];
+        ll dp[r+1];
         memset(dp, 0, sizeof(dp));
-        dp[0][0] = 1;
-        dp[0][1] = 1;
-        for(int i = 1; i < n; i++)
+        dp[0] = 1;
+        // dp[0][1] = 1;
+        for(int i = 1; i <= n; i++)
         {
-            dp[i][0] = 1;
-            for(int j = 1; j <= min(i+1,r); j++)
+            for(int j = min(i, r); j > 0 ; j--)
             {
-                dp[i][j] = (dp[i-1][j] + dp[i-1][j-1])%mod;
+                dp[j] = (dp[j] + dp[j-1])%mod;
             }
         }
-        return (int)dp[n-1][r];
+        return (int)dp[r];
     }
 };
 
