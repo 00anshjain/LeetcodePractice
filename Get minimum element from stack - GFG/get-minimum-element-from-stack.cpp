@@ -34,11 +34,10 @@ class Solution{
             if(st.empty())
                 return -1;
             int ans;
-            if(st.top() == -1)
+            if(st.top() < minEle)
             {
                 ans = minEle;
-                st.pop();
-                minEle = st.top();
+                minEle = 2*ans - st.top();
                 st.pop();
             }
             else
@@ -61,8 +60,8 @@ class Solution{
            if(x < minEle)
            {
             //   st.push(x/minEle);
-              st.push(minEle);
-              st.push(-1);
+              st.push(2*x - minEle);
+            //   st.push(-1);
               minEle = x;
            }
            else
