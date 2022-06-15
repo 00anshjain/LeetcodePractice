@@ -11,53 +11,44 @@ class Solution
     //of all the characters of string p.
     string smallestWindow (string s, string p)
     {
-        unordered_map<char, int> mp;
-        // unordered_set<char> st;
-        for(auto c : p)
-        {
-            mp[c]++;
-            // st.insert(c);
-        }
         int n = s.size();
-        int k = p.size();
-        if(k > n)
-            return "-1";
-        string ans = "-1";
-        int ans_sz = INT_MAX;
-        int j = 0;
+        unordered_map<char, int> mp;
+        for(auto c : p)
+            mp[c]++;
+        int unq = mp.size();
+        int i = 0, ans = n+1;
         int matched = 0;
-        for(int i = 0; i < n; i++)
+        int start = 0;
+        for(int j = 0; j < n; j++)
         {
-            if(mp.find(s[i]) != mp.end())
+            if(mp.find(s[j]) != mp.end())
             {
-                mp[s[i]]--;
-                if(mp[s[i]]>= 0)
+                mp[s[j]]--;
+                if(mp[s[j]] == 0)
+                {    
                     matched++;
-                while(matched == k)
-                {
-                    // ans = min(ans, i-j+1);
-                    if(i-j+1 < ans_sz)
+                    while(matched == unq)
                     {
-                        ans_sz = i-j+1;
-                        ans = s.substr(j, i-j+1);
+                        if(ans > j - i + 1)
+                        {
+                            ans = j-i+1;
+                            start = i;
+                        }
+                        if(mp.find(s[i]) != mp.end())
+                        {
+                            mp[s[i]]++;
+                            if(mp[s[i]] > 0)
+                                matched--;
+                        }
+                        i++;
                     }
-                    // j++;
-                    if(mp.find(s[j]) != mp.end())
-                    {
-                        mp[s[j]]++;
-                        if(mp[s[j]] > 0)
-                            matched--;
-                    }
-                    j++;
-                }
+                }    
             }
         }
-        // if(ans == INT_MAX)
-        //     return "-1";
-        return ans; 
-        
-        
-        
+        if(ans > n)
+            return "-1";
+        return s.substr(start, ans);
+        // Your code here
     }
 };
 
