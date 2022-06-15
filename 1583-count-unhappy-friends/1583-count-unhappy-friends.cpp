@@ -1,7 +1,9 @@
 class Solution {
 public:
     int unhappyFriends(int n, vector<vector<int>>& pref, vector<vector<int>>& pairs) {
-        unordered_set<int> ans;
+        // unordered_set<int> ans;
+        int unhappy = 0;
+        vector<bool> visited(n);
         unordered_map<int, int> pr;
         for(auto x : pairs)
         {
@@ -12,55 +14,63 @@ public:
         {
             int v = V[1];
             int u = V[0];
-            
-            for(auto x : pref[u])
+            if(!visited[u])
             {
-                if(x == v)
-                    break;
-                // bool flag = false;
-                for(auto z : pref[x])
+                for(auto x : pref[u])
                 {
-                    if(z == pr[x])
+                    if(x == v)
                         break;
-                    if(z == u)
+                    bool flag = false;
+                    int y = pr[x];
+                    for(auto z : pref[x])
                     {
-                        ans.insert(z);
-                        ans.insert(u);
-                        // flag = true;
-                        break;
+                        if(z == y)
+                            break;
+                        if(z == u)
+                        {
+                            unhappy++;
+                            // ans.insert(z);
+                            // ans.insert(u);
+                            flag = true;
+                            break;
+                        }
                     }
+                    if(flag)
+                        break;
                 }
-                // if(flag)
-                //     break;
-                
+                visited[u] = true;
             }
             
-            for(auto x : pref[v])
+            if(!visited[v])
             {
-                if(x == u)
-                    break;
-                // bool flag = false;
-                for(auto z : pref[x])
+                for(auto x : pref[v])
                 {
-                    if(z == pr[x])
+                    if(x == u)
                         break;
-                    if(z == v)
+                    bool flag = false;
+                    int y = pr[x];
+                    for(auto z : pref[x])
                     {
-                        ans.insert(z);
-                        ans.insert(v);
-                        // flag = true;
-                        break;
+                        if(z == y)
+                            break;
+                        if(z == v)
+                        {
+                            unhappy++;
+                            // ans.insert(z);
+                            // ans.insert(u);
+                            flag = true;
+                            break;
+                        }
                     }
+                    if(flag)
+                        break;
                 }
-                // if(flag)
-                //     break;
-                
-            }
-            
+                visited[v] = true;
+            }            
             
             
             
         }
-        return ans.size();
+        return unhappy;
     }
 };
