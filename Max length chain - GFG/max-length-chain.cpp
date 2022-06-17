@@ -49,18 +49,27 @@ int maxChainLen(struct val p[],int n)
     // memset(dp, 1, sizeof(dp));
     // dp[0] = 1;
     int mx = 0;
+    int t= INT_MIN;
     for(int i = 0; i < n; i++)
     {
-        for(int j = i-1; j >= 0; j--)
+        if(p[i].first > t)
         {
-            if(p[j].second < p[i].first)
-            {
-                dp[i] = max(dp[i], dp[j] + 1);
-            }
-            
+            t = p[i].second;
+            mx++;
         }
-        mx = max(mx, dp[i]);
     }
+    // for(int i = 0; i < n; i++)
+    // {
+    //     for(int j = i-1; j >= 0; j--)
+    //     {
+    //         if(p[j].second < p[i].first)
+    //         {
+    //             dp[i] = max(dp[i], dp[j] + 1);
+    //         }
+            
+    //     }
+    //     mx = max(mx, dp[i]);
+    // }
     // for(int i = 0; i < n; i++)
     //     cout<<dp[i]<<" ";
     return mx;
