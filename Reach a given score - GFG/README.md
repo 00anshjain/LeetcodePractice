@@ -1,5 +1,5 @@
 # Reach a given score
-## Easy 
+##  Easy 
 <div class="problem-statement">
                 <p></p><p><span style="font-size:18px">Consider a game where a player can score <strong>3</strong> or <strong>5</strong> or <strong>10</strong> points in a move. Given a total score <strong>n</strong>, find number of distinct combinations&nbsp;to reach the given score.</span></p>
 
