@@ -11,15 +11,21 @@ class Solution{
 public:
     int maxSquare(int n, int m, vector<vector<int>> mat){
         int mx = 0;
-        if(n == 1 || m == 1)
-            return 1;
-        for(int i = 1; i < n; i++)
+        for(int i = 0; i < n; i++)
         {
-            for(int j = 1; j < m; j++)
+            for(int j = 0; j < m; j++)
             {
+                if((i == 0 || j == 0) && mat[i][j] == 1)
+                {
+                    mx = max(mx, mat[i][j]);
+                    continue;
+                }
+                
                 if(mat[i][j] == 1)
-                    mat[i][j] = 1 + min(min(mat[i-1][j-1], mat[i-1][j]), mat[i][j-1]);
-                mx = max(mat[i][j], mx);
+                {
+                    mat[i][j] = min(min(mat[i-1][j], mat[i][j-1]), mat[i-1][j-1]) + 1;
+                    mx= max(mx,mat[i][j]);
+                }
             }
         }
         return mx;
