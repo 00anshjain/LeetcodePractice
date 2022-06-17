@@ -8,31 +8,26 @@ class Solution{
     public:
     int maxSumPairWithDifferenceLessThanK(int arr[], int N, int K)
     {
-        priority_queue<int> pq(arr, arr+N);
-        int ans = 0;
-        while(!pq.empty())
+        sort(arr, arr+N);
+        // int mask = 0;
+        int sum = 0;
+        for(int j = N-1; j>= 0; j--)
         {
-            int t = pq.top();
-            pq.pop();
-            if(pq.empty())
-                break;
-            int p = pq.top();
-            pq.pop();
-            if(t-p < K)
+            if(arr[j] == -1)
+                continue;
+            for(int i = j-1; i>= 0; i--)
             {
-                ans += t;
-                ans += p;
+                if(arr[i] != -1 && arr[j] - arr[i] < K)
+                {
+                
+                    sum += arr[j];
+                    sum += arr[i];
+                    arr[i] = -1;
+                    break;
+                }
             }
-            else
-                pq.push(p);
         }
-        return ans;
-        // sort(arr, arr+N, greater<int>());
-        // int i = 0, j = 1;
-        // while(i < n && j < n)
-        // {
-        //     if(arr[])
-        // }
+        return sum;
         // Your code goes here   
     }
 };
