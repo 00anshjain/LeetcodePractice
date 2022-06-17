@@ -9,29 +9,25 @@ using namespace std;
 // typedef long long ll;
 long long int count(long long int n)
 {
-	long long int dp[n+1],i;
-	memset(dp, 0, sizeof(dp));
-	dp[0] = 1;                 // If 0 sum is required number of ways is 1.
-// 	for(ll i = 3; i < min(n+1, (ll)3); i++)
-// 	{
-// 	    dp[i] = 0;
-// 	}
-	for(i = 3; i < n+1; i++)
+	long long int table[n+1],i;
+	memset(table, 0, sizeof(table));
+	table[0]=1;                 // If 0 sum is required number of ways is 1.
+	for(ll i = 3; i <= n; i++)
 	{
-	    dp[i] += dp[i-3];
+	        table[i] += table[i-3];
 	}
-	for(i = 5; i < n+1; i++)
+	for(ll i = 5; i <= n; i++)
 	{
-	    dp[i] += dp[i-5];
+	        table[i] += table[i-5];
 	}
-	for(i = 10; i < n+1; i++)
+	for(ll i = 10; i <= n; i++)
 	{
-	    dp[i] += dp[i-10];
+	        table[i] += table[i-10];
 	}
-// 	for(int i = 0; i <= n; i++)
-// 	    cout<<dp[i]<<" ";
-// 	   cout<<endl;
-	return dp[n];
+	
+	// Your code here
+	
+	return table[n];
 }
 
 // { Driver Code Starts.
