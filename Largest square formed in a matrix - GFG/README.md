@@ -1,5 +1,5 @@
 # Largest square formed in a matrix
-## Medium 
+##  Medium 
 <div class="problem-statement">
                 <p></p><p><span style="font-size:18px">Given a binary matrix <strong>mat</strong>&nbsp;of size <strong>n</strong> * <strong>m</strong>, find out the maximum size square sub-matrix with all 1s.</span></p>
 
