@@ -1,20 +1,24 @@
 class Solution {
 public:
-    int jump(vector<int>& nums) {
-        int jump = 0;
-        int cnt = 0;
-        int mx = 0;
-        int n = nums.size();
-        for(int i = 0; i < n-1; i++)
+    int recur(vector<int>& nums, int n, vector<int>& dp)
+    {
+        if(n == 0)
+            return 0;
+        if(dp[n] != -1)
+            return dp[n];
+        for(int j = 0; j < n; j++)
         {
-            mx = max(mx, i + nums[i]);
-            if(cnt == 0)
+            if(nums[j] + j >= n)
             {
-                jump++;
-                cnt += mx - i;
+                return dp[n] = 1 + recur(nums, j, dp);
             }
-            cnt--;
         }
-        return jump;
+        return dp[n] = INT_MAX;
+    }
+    int jump(vector<int>& nums) {
+        int n = nums.size();
+        vector<int> dp(n, -1);
+        int k = recur(nums, n-1, dp);
+        return k == INT_MAX ? -1 : k;
     }
 };
