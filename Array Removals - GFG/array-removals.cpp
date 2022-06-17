@@ -10,28 +10,37 @@ using namespace std;
 
 class Solution{
     public:
+    int BinarySearchfind(vector<int> &a, int l, int r, int val)
+    {
+        int ans = -1;
+        while(l <= r)
+        {
+            int mid = l + (r - l)/2;
+            if(a[mid] == val)
+                return mid;
+            if(a[mid] < val)
+            {
+                ans = mid;
+                l = mid + 1;
+            }
+            else
+                r = mid - 1;
+        }
+        return ans;
+    }
     int removals(vector<int>& a, int k){
-        int steps = INT_MAX;
-        sort(a.begin(), a.end());
         int n = a.size();
+        sort(a.begin(), a.end());
+        int ans = n;
         for(int i = 0; i < n; i++)
         {
-            int mn = a[i];
-            int mx = a[i];
-            for(int j = i; j < n; j++)
+            int j = BinarySearchfind(a, i, n-1, a[i]+k);
+            if(j != -1)
             {
-                mn = min(a[j], mn);
-                mx = max(a[j], mx);
-                if(mx - mn <= k)
-                {
-                    steps = min(steps, n - (j-i+1));
-                }
-                else
-                    break;
-                
+                ans = min(ans, n - (j - i + 1));
             }
         }
-        return steps;
+        return ans;
         //Code here
     }
 };
