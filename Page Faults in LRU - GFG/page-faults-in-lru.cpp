@@ -11,42 +11,46 @@ using namespace std;
 
 class Solution{
 public:
-    int pageFaults(int N, int C, int pages[]){
+    int pageFaults(int n, int c, int pages[]){
         // code here
-        unordered_map<int, int> mp;
-        int fault = 0;
-        for(int i =0; i < N; i++)
+        list<int> q;
+        unordered_map<int,list<int>::iterator >mp;
+        int i = 0; 
+        int pagefault = 0;
+        while(i < n)
         {
-            if(mp.find(pages[i]) == mp.end())
+            if(mp.find(pages[i]) == mp.end() )
             {
-                fault++;
-                if(mp.size() < C)
+                if(q.size() < c)
                 {
-                    mp[pages[i]] = i;
+                    q.push_back(pages[i]);
+                    auto itr = q.end();
+                    itr--;
+                    mp[pages[i]] = itr;
                 }
                 else
                 {
-                    int lastUsed = INT_MAX;
-                    // int pageNo = 0;
-                    auto pageToRemove = mp.begin();
-                    for(auto itr = mp.begin(); itr != mp.end(); itr++)
-                    {
-                        if(itr->second < lastUsed)
-                        {
-                            lastUsed = itr->second;
-                            pageToRemove = itr;
-                        }
-                    }
-                    mp.erase(pageToRemove);
-                    mp[pages[i]] = i;
+                    int a = q.front();
+                    mp.erase(a);
+                    q.pop_front();
+                    q.push_back(pages[i]);
+                    auto itr = q.end();
+                    itr--;
+                    mp[pages[i]] = itr;
                 }
+                pagefault++;
             }
             else
             {
-                mp[pages[i]] = i;
+                q.erase(mp[pages[i]]);
+                q.push_back(pages[i]);
+                auto itr = q.end();
+                itr--;
+                mp[pages[i]] = itr;
             }
+            i++;
         }
-        return fault;
+        return pagefault;
     }
 };
 
