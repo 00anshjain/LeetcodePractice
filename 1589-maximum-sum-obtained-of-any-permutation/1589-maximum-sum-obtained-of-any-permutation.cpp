@@ -21,16 +21,18 @@ public:
         }
         for(int i = 1; i < n; i++)
             req[i] = req[i-1] + req[i];
-        priority_queue<pair<int, int>> pq;
-        for(int i = 0; i < n; i++)
-            pq.push({req[i], i});
+        sort(req.begin(), req.end(), greater<int>());
+        // priority_queue<pair<int, int>> pq;
+        // for(int i = 0; i < n; i++)
+        //     pq.push({req[i], i});
         sort(nums.begin(), nums.end(), greater<int>());
         int i = 0;
         ll sum = 0;
-        while(!pq.empty())
+        while(i < n && req[i] > 0)
         {
-           sum += ((ll)nums[i]*pq.top().first)%mod;
-            pq.pop();
+           // sum += ((ll)nums[i]*pq.top().first)%mod;
+           //  pq.pop();
+            sum += ((ll)nums[i]*req[i])%mod;
             i++;
             sum%= mod;
         }
