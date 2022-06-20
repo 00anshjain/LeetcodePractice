@@ -9,21 +9,31 @@ using namespace std;
 
 class Solution{
 public:
-    int knap(int N, int W, int val[], int wt[], vector<vector<int>> &dp)
-    {
-        if(dp[N][W] != -1)
-            return dp[N][W];
-        if(N == 0)
-            return 0;
-        if(wt[N-1] <= W)
-            return dp[N][W] = max(knap(N, W-wt[N-1], val, wt, dp) + val[N-1], knap(N-1, W, val, wt, dp));
-        return dp[N][W] = knap(N-1, W, val, wt, dp);
+    // int knap(int N, int W, int val[], int wt[], vector<vector<int>> &dp)
+    // {
+    //     if(dp[N][W] != -1)
+    //         return dp[N][W];
+    //     if(N == 0)
+    //         return 0;
+    //     if(wt[N-1] <= W)
+    //         return dp[N][W] = max(knap(N, W-wt[N-1], val, wt, dp) + val[N-1], knap(N-1, W, val, wt, dp));
+    //     return dp[N][W] = knap(N-1, W, val, wt, dp);
         
-    }
+    // }
     int knapSack(int N, int W, int val[], int wt[])
     {
-        vector<vector<int>> dp(N+1, vector<int>(W+1, -1));
-        return knap(N, W, val, wt, dp);
+        vector<vector<int>> dp(N+1, vector<int>(W+1, 0));
+        for(int i = 1; i <= N; i++)
+        {
+            for(int j = 1; j <= W; j++)
+            {
+                if(j >= wt[i-1])
+                    dp[i][j] = max(dp[i-1][j], dp[i][j-wt[i-1]] + val[i-1]);
+                else
+                    dp[i][j] = dp[i-1][j];
+            }
+        }
+        return dp[N][W];
         // code here
     }
 };
