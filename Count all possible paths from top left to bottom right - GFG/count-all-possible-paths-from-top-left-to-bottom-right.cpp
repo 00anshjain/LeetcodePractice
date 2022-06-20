@@ -12,13 +12,13 @@ class Solution {
     int mod = 1e9+7;
     long long int numberOfPaths(int m, int n){
         ans = 0;
-        vector<vector<ll>> dp(m+1, vector<ll>(n+1, 1));
+        vector<ll> dp(n, 1);
         for(int i = 1; i < m; i++)
         {
             for(int j = 1; j < n; j++)
-                dp[i][j] = (dp[i-1][j] + dp[i][j-1])%mod;
+                dp[j] = (dp[j] + dp[j-1])%mod;
         }
-        return dp[m-1][n-1];
+        return dp[n-1];
         // code here
     }
 };
