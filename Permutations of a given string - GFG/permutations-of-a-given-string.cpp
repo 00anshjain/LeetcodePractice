@@ -6,35 +6,40 @@ using namespace std;
 class Solution
 {
 	public:
-	    void recur(string &s, vector<bool> &taken, int sz, string curr, int n, vector<string>& ans, unordered_set<string>& dict)
+	    int sz;
+	    void recur(unordered_set<string> &st, string &curr, string &S, vector<string> &ans, int n)
 	    {
-	        if(dict.find(curr) != dict.end())
+	        if(st.find(curr) != st.end())
 	            return;
-	        dict.insert(curr);
-	        if(sz == n)
+	        st.insert(curr);
+	        if(n == 0)
 	        {
 	            ans.push_back(curr);
 	            return;
 	        }
-	        for(int i = 0; i < n; i++)
+	        for(int i = 0; i < sz; i++)
 	        {
-	            if(!taken[i])
+	            if(S[i] != '&')
 	            {
-	                taken[i] = true;
-	                recur(s, taken, sz+1, curr + s[i], n, ans, dict);
-	                taken[i] = false;
+	                char k = S[i];
+	                curr.push_back(k);
+	                S[i] = '&';
+	                recur(st, curr, S, ans, n-1);
+	                curr.pop_back();
+	                S[i] = k;
 	            }
 	        }
 	    }
-		vector<string>find_permutation(string s)
+		vector<string> find_permutation(string S)
 		{
+		  //  sort(S.begin(), S.end());
+		    unordered_set<string> st;
+		    string curr = "";
 		    vector<string> ans;
-		    sort(s.begin(), s.end());
-		    int n = s.size();
-		    vector<bool> taken(n, false);
-		    unordered_set<string> dict;
-		    recur(s, taken, 0, "", n, ans, dict);
-		  //  vector<string> res(ans.begin(), ans.end())
+		    int n = S.size();
+		    sz = n;
+		    recur(st, curr, S, ans, n);
+		    sort(ans.begin(), ans.end());
 		    return ans;
 		    // Code here there
 		}
