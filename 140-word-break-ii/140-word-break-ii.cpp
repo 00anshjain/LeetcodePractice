@@ -1,6 +1,7 @@
 class Solution {
 public:
-    void recur(vector<string> &res, string &s, vector<bool> &dp, unordered_set<string> &dict, int i, int n, string curr)
+    int n;
+    void recur(int i, vector<bool> &dp, string curr, vector<string> &res, unordered_set<string> &dict, string &s)
     {
         if(i == n)
         {
@@ -11,31 +12,41 @@ public:
         {
             if(dp[j+1])
             {
-                string z = s.substr(i, j-i+1);
-                if(dict.find(z) != dict.end())
+                string k = s.substr(i, j-i+1);
+                if(dict.find(k) != dict.end())
                 {
+                    string g = curr;
                     if(i == 0)
-                        recur(res, s, dp, dict, j+1, n, curr + z);
+                    {
+                        g += k;
+                    }
                     else
-                        recur(res, s, dp, dict, j+1, n, curr+ ' '+ z);
+                    {
+                        g += " ";
+                        g += k;
+                    }
+                    recur(j+1, dp, g, res, dict, s);
                 }
             }
         }
+        
     }
     vector<string> wordBreak(string s, vector<string>& wordDict) {
         unordered_set<string> dict(wordDict.begin(), wordDict.end());
-        int n = s.size();
+        n = s.size();
         vector<bool> dp(n+1, false);
         dp[0] = true;
-        // recur()
-        for(int j = 1; j <= n; j++)
+        for(int i = 1; i <= n; i++)
         {
-            for(int i = j-1; i >= 0; i--)
+            for(int j = i-1; j>= 0; j--)
             {
-                if(dp[i] && (dict.find(s.substr(i, j-i)) != dict.end()))
+                if(dp[j])
                 {
-                    dp[j] = true;
-                    break;
+                    if(dict.find(s.substr(j, i-j)) != dict.end())
+                    {
+                        dp[i] = true;
+                        break;
+                    }
                 }
             }
         }
@@ -43,7 +54,7 @@ public:
         if(!dp[n])
             return res;
         string curr = "";
-        recur(res, s, dp, dict, 0, n, curr);
+        recur(0, dp, curr, res, dict, s);
         return res;
     }
 };
