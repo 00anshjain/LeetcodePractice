@@ -9,41 +9,29 @@ using namespace std;
 
 class Solution{
 public:
-    bool isPalin(string &s, int l, int r)
+    int palindromicPartition(string s)
     {
-        while(l < r)
+        int n = s.size();
+        int cut[n];
+        for(int i = 0; i < n; i++)
+            cut[i] = i;
+        bool dp[n][n];
+        memset(dp, false, sizeof(dp));
+        for(int j = 0; j < n; j++)  //end at j , start at i
         {
-            if(s[l++] != s[r--])
-                return false;
+            for(int i = j; i >= 0; i--)
+            {
+                if(s[i] == s[j] && (j - i + 1 <= 2 || dp[i+1][j-1]))
+                {
+                    dp[i][j] = true;
+                    if(i != 0)
+                        cut[j] = min(cut[j], 1 + cut[i-1]);
+                    else
+                        cut[j] = 0;
+                }
+            }
         }
-        return true;
-    }
-    int recur(int i, int j, string &str, vector<vector<int>>& dp)
-    {
-        if(i >= j)
-            return 0;
-        if(dp[i][j] != -1)
-            return dp[i][j];
-        if(isPalin(str, i, j))
-            return dp[i][j] = 0;
-        int ans = INT_MAX;
-        for(int k = i; k < j; k++)
-        {
-            // if(isPalin(str, i, k) && isPalin(str, k+1, j))
-            // {
-                // ans = min(ans, 1 + recur(i, k, str, dp) + recur(k+1, j, str, dp));
-                int temp = 1 + recur(i, k, str, dp) + recur(k+1, j, str, dp);
-                if(temp < ans)
-                    ans = temp;
-            // }
-        }
-        return dp[i][j] = ans;
-    }
-    int palindromicPartition(string str)
-    {
-        int n = str.size();
-        vector<vector<int>> dp(n, vector<int>(n, -1));
-        return recur(0, n-1, str, dp);
+        return cut[n-1];
         // code here
     }
 };
