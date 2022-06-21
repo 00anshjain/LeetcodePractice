@@ -11,38 +11,17 @@ public:
 	// #define ll long long
 	int mod = 1e9+7;
 	ll countStrings(int n) {
-	    vector<ll> dp(n+1);
-        if(n == 0)
-            return 1;
-        if(n == 1)
-            return 2;
-        dp[0] = 1l;
-        dp[1] = 2l;
-        for(int i = 2; i <= n; i++)
-            dp[i] = (dp[i-1] + dp[i-2])%mod;
-        return dp[n];
-        // bool last = false;
-        // int j = 1;
-        // while(1)
-        // {
-        //     for(int i = 0; i < j; i++)
-        //     {
-        //         dp.push_back((2*dp[j] + dp[i]));
-        //         // if(dp.back() > n)
-        //         // {
-        //         //     cout<<"break "<<dp.back()<<" "<<n<<endl;
-        //         //     last = true;
-        //         //     break;
-        //         // }
-        //     }
-        //     j++;
-        //     if(last == true)
-        //         break;
-        // }
-        // // for(auto x : dp)
-        // //     cout<<x<<" ";
-        // // cout<<endl;
-        // return dp.size()-1;
+	    ll prev0 = 1l;  //ending with 0
+	    ll prev1 = 1l;  //ending with 1
+	    for(int i = 2; i <= n; i++)
+	    {
+	        ll curr0 = (prev0 + prev1)%mod;
+	        ll curr1 = (prev0)%mod;
+	        prev0 = curr0;
+	        prev1 = curr1;
+	    }
+        return (prev0 + prev1)%mod;
+       
 	}
 };
 
