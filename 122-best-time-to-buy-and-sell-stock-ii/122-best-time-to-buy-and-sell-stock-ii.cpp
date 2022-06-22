@@ -1,36 +1,35 @@
 class Solution {
 public:
     int maxProfit(vector<int>& prices) {
-        int pro = 0;
-        int buy = -1;
+        int profit = 0;
         int n = prices.size();
         int i = 0;
         while(i < n)
         {
-            if(buy == -1)
+            
+            if(i+1 < n && prices[i+1] > prices[i])
             {
-                while(i + 1 < n && prices[i+1] <= prices[i])
-                    i++;
-                // cout<<"BUY"<<i<<endl;
-                if(i < n-1)
-                    buy = prices[i];
+                // while(j+1 < n && prices[j+1] > prices[j])
+                //     j++;
+                profit += (prices[i+1] - prices[i]);
+                // i = j + 1;
             }
-            else
-            {
-                while(i + 1 < n && prices[i+1] >= prices[i])
-                // {
-                    i++;
-                // }
-                // cout<<"SELL"<<i<<endl;
-                if(i < n)
-                {
-                    pro += (prices[i] - buy);
-                    buy = -1;
-                }
-            }
-            i++;
+            // else
+                i++;
+            
+            
+            
+            // int j = i;
+            // if(j+1 < n && prices[j+1] > prices[j])
+            // {
+            //     // while(j+1 < n && prices[j+1] > prices[j])
+            //     //     j++;
+            //     profit += (prices[j] - prices[i]);
+            //     i = j + 1;
+            // }
+            // else
+            //     i++;
         }
-        return pro;
-        
+        return profit;
     }
 };
