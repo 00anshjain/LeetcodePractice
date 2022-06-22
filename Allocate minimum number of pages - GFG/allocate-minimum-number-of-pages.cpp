@@ -18,8 +18,14 @@ class Solution
             return -1;
         if(N == M)
             return *max_element(A, A+N);
-        int sum = accumulate(A, A+N, 0);
-        int left = 0, right = sum;
+        int sum = A[0];
+        int left = A[0];
+        for(int i = 1; i < N; i++)
+        {
+            sum += A[i];
+            left = max(left, A[i]);
+        }
+        int right = sum;
         int minPages= INT_MAX;
         while(left <= right)
         {
@@ -34,8 +40,7 @@ class Solution
                     currPages += x;
                 else
                 {
-                    currPages = 0;
-                    i--;
+                    currPages = x;
                     students++;
                     if(students > M)
                         break;
