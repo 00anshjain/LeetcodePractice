@@ -6,28 +6,32 @@ using namespace std;
 
  // } Driver Code Ends
 //User function Template for C++
+    int n;
 
-int maxProfit(vector<int>&price){
-    int n = price.size();
-    int dp[n];
-    memset(dp, 0,sizeof(dp));
-    // dp[0][0] = 0;
-    // dp[0][1] = 0;
-    dp[0] = 0;
-    int mnBuy = price[0];
-    for(int i = 1; i < n; i++)
+    int recur(vector<vector<vector<int>>>& dp, vector<int>& prices, int ind, int buy, int cap)
     {
-        mnBuy = min(mnBuy, price[i]);
-        dp[i] = max(dp[i-1], price[i] - mnBuy);
+        if(cap == 0 || ind == n)
+            return 0;
+        if(dp[ind][buy][cap] != -1)
+            return dp[ind][buy][cap];
+        if(buy == 1)
+        {
+            return dp[ind][buy][cap] = max(-prices[ind] + recur(dp, prices, ind+1, 0, cap), 
+                                                    recur(dp, prices, ind+1, 1, cap));
+        }
+        else
+        {
+            return dp[ind][buy][cap] = max(prices[ind] + recur(dp, prices, ind+1, 1, cap-1), 
+                                                recur(dp, prices, ind+1, 0, cap));
+        }
     }
-    int mxSell = price[n-1];
-    for(int i = n-2; i >= 0; i--)
-    {
-        mxSell = max(mxSell, price[i]);
-        dp[i] = max(dp[i+1], dp[i] + mxSell - price[i]);
-        // ans = max(ans, dp[i]);
-    }
-    return dp[0];
+int maxProfit(vector<int>&prices){
+    int k = 2;
+    n = prices.size();
+    vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(k+1, -1)));
+    //index from 0 to n-1, but 0 or 1, capacity 0 to k;
+    recur(dp, prices, 0, 1, 2);
+    return dp[0][1][2];
     // return ans;
     //Write your code here..
 }
