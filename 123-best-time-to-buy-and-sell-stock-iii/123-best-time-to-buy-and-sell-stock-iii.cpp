@@ -22,7 +22,7 @@ public:
         int n = prices.size();
         // vector<vector<vector<int>>> dp(n, vector<vector<int>>(2, vector<int>(k+1, -1)));
         //index from 0 to n-1, but 0 or 1, capacity 0 to k;
-        int dp[n+1][2][k+1];
+        int dp[2][2][k+1];
         memset(dp, 0, sizeof(dp));
         for(int ind = n-1; ind >= 0; ind--)
         {
@@ -32,16 +32,16 @@ public:
                 {
                     if(buy == 1)
                     {
-                        dp[ind][buy][cap] = max(-prices[ind] + dp[ind+1][0][cap],
-                                                        dp[ind+1][1][cap]);
+                        dp[ind%2][buy][cap] = max(-prices[ind] + dp[(ind+1)%2][0][cap],
+                                                        dp[(ind+1)%2][1][cap]);
 
                         // return dp[ind][buy][cap] = max(-prices[ind] + recur(dp, prices, ind+1, 0, cap), 
                         //                                         recur(dp, prices, ind+1, 1, cap));
                     }
                     else
                     {
-                        dp[ind][buy][cap] = max(prices[ind] + dp[ind+1][1][cap-1], 
-                                                            dp[ind+1][0][cap]);
+                        dp[ind%2][buy][cap] = max(prices[ind] + dp[(ind+1)%2][1][cap-1], 
+                                                            dp[(ind+1)%2][0][cap]);
                         // return dp[ind][buy][cap] = max(prices[ind] + recur(dp, prices, ind+1, 1, cap-1), 
                         //                                     recur(dp, prices, ind+1, 0, cap));
                     }
