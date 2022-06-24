@@ -11,41 +11,37 @@ class Solution
     typedef long long ll;
     long long getMaxArea(long long arr[], int n)
     {
-        vector<ll> stl(n), str(n);
-        stack<ll> st1;
-        for(ll i = 0; i < n; i++)
+        vector<ll> stl(n, 0), str(n, n-1);
+        stack<int> st1, st2;
+        st1.push(0);
+        for(int i = 1; i < n; i++)
         {
-            while(!st1.empty() && arr[st1.top()] > arr[i])
-            {
+            while(!st1.empty() && arr[st1.top()] >= arr[i])
                 st1.pop();
-            }
-            if(st1.empty())
-                stl[i] = -1;
-            else
-                stl[i] = st1.top();
+            if(!st1.empty())
+            //     stl[i]= -1;
+            // else
+                stl[i] = st1.top()+1;
             st1.push(i);
         }
-        stack<ll> st2;
-        for(ll i = n-1; i >= 0; i--)
+        st2.push(n-1);
+        for(int i = n-2; i >= 0; i--)
         {
-            
             while(!st2.empty() && arr[st2.top()] >= arr[i])
-            {
                 st2.pop();
-            }
-            if(st2.empty())
-                str[i] = n;
-            else
-                str[i] = st2.top();
+            if(!st2.empty())
+            //     stl[i]= -1;
+            // else
+                str[i] = st2.top()-1;
             st2.push(i);
         }
         ll ans = 0;
-        for(ll i = 0; i < n; i++)
+        for(int i = 0; i < n; i++)
         {
-            // cout<<arr[i]<<<" "<<str
-            ans = max(ans, arr[i]*(str[i] - stl[i] -1));
+            ans = max(ans, arr[i]*(str[i] - stl[i]+1));
         }
         return ans;
+        
         // Your code here
     }
 };
