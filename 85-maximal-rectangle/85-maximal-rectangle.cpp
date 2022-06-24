@@ -1,73 +1,50 @@
 class Solution {
 public:
-    vector<int> NSL(vector<int> &arr, int n)
+    typedef int ll;
+    int getAreaHistogram(vector<int> &ht, int n)
     {
-        vector<int> left(n);
-        stack<int> st;
-        for(int i = 0;i < n; i++)
+        vector<int> stl(n, 0), str(n, n-1);
+        stack<int> st1, st2;
+        st1.push(0);
+        st2.push(n-1);
+        for(int i = 1; i < n; i++)
         {
-            while(!st.empty() && arr[st.top()] >= arr[i])
-                st.pop();
-            if(st.empty())
-                left[i] = -1;
-            else
-                left[i] = st.top();
-            st.push(i);
+            while(!st1.empty() && ht[st1.top()] >= ht[i])
+                st1.pop();
+            if(!st1.empty())
+                stl[i] = st1.top() + 1;
+            st1.push(i);
         }
-        return left;
-    }
-    vector<int> NSR(vector<int> &arr, int n)
-    {
-        vector<int> right(n);
-        stack<int> st;
-        for(int i = n-1;i >= 0; i--)
+        for(int i = n-2; i >= 0; i--)
         {
-            while(!st.empty() && arr[st.top()] >= arr[i])
-                st.pop();
-            if(st.empty())
-                right[i] = n;
-            else
-                right[i] = st.top();
-            st.push(i);
+            while(!st2.empty() && ht[st2.top()] >= ht[i])
+                st2.pop();
+            if(!st2.empty())
+                str[i] = st2.top()-1;
+            st2.push(i);
         }
-        return right;
-    }
-    int maximumAreaHistogram(vector<int> &arr, int n)
-    {
-        vector<int> left = NSL(arr, n);
-        vector<int> right = NSR(arr, n);
         int ans = 0;
         for(int i = 0; i < n; i++)
-        {
-            ans = max(ans, arr[i] * (right[i] -left[i] - 1));
-        }
+            ans = max(ans, ht[i]*(str[i] - stl[i] + 1));
         return ans;
     }
     int maximalRectangle(vector<vector<char>>& matrix) {
-        int m = matrix.size();
-        int n = matrix[0].size();
-        vector<vector<int>> dp(m, vector<int>(n));
+        int n = matrix.size();
+        int m = matrix[0].size();
+        vector<int> ht(m, 0);
+        int ans = 0;
         for(int i = 0; i < n; i++)
-        {   if(matrix[0][i] == '1')
-                dp[0][i] = 1;
-            else
-                dp[0][i] = 0;
-        }
-        // vector<int> v()
-        vector<int> v(dp[0].begin(), dp[0].end()); 
-        // int ans = maximumAreaHistogram(dp[0], n);
-        int ans = maximumAreaHistogram(v, n);
-        for(int i = 1; i < m; i++)
         {
-            for(int j = 0; j < n; j++)
-            {   if(matrix[i][j] == '1')
-                    dp[i][j] = dp[i-1][j] + 1;
+            for(int j = 0; j < m; j++)
+            {
+                if(matrix[i][j] == '0')
+                    ht[j] = 0;
                 else
-                    dp[i][j] = 0;
+                    ht[j] += 1;
             }
-            vector<int> v(dp[i].begin(), dp[i].end()); 
-            ans = max(ans, maximumAreaHistogram(v, n));
+            ans = max(ans, getAreaHistogram(ht, m));
         }
         return ans;
+        
     }
 };
