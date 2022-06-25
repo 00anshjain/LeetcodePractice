@@ -95,26 +95,18 @@ class Solution {
   public:
     // Function to return the diameter of a Binary Tree.
     int ans;
-    int height(Node* root, unordered_map<Node*, int> &mp)
-    {
-        if (!root)
-            return 0;
-        if(mp.find(root) != mp.end())
-            return mp[root];
-        return mp[root] = max(height(root->left, mp), height(root->right, mp))+1;
-    }
-    void dia(Node* root, unordered_map<Node*, int> &mp)
+    int recur(Node* root)
     {
         if(!root)
-            return;
-        dia(root->right, mp);
-        dia(root->left, mp);
-        ans = max(ans, height(root->left, mp) + height(root->right, mp) + 1);
+            return 0;
+        int l = recur(root->left);
+        int r = recur(root->right);
+        ans = max(ans, l + r + 1);
+        return max(l, r) + 1;
     }
     int diameter(Node* root) {
         ans = 0;
-        unordered_map<Node*, int> mp;
-        dia(root, mp);
+        recur(root);
         return ans;
         // Your code here
     }
