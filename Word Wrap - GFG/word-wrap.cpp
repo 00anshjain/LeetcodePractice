@@ -12,56 +12,25 @@ public:
     int n;
     int recur(int i, vector<int> &nums, int k, vector<int>& dp)
     {
-        if(i >= n)
-            return INT_MAX;
+        if(i >= n-1)
+            return 0;
         if(dp[i] != -1)
             return dp[i];
-        int cost1, cost2;
-        int j = k;  //remaining_space
-        int ans = INT_MAX;
+        int a = INT_MAX;
+        int j = k;
         int start = i;
-        while(i < n)
+        while(i < n && nums[i] <= j)
         {
-            if(i == start && nums[i] <= j)
-                j -= nums[i];
-            else if(nums[i] + 1 <= j)
-                j-= (nums[i]+1);
+            j -= nums[i];
+            if(i < n-1)
+                a = min(a, recur(i+1, nums, k, dp) + j*j);
             else
-                break;
-            cost1 = j*j;
-            cost2 = recur(i+1, nums, k, dp);
-            ans = min(ans, cost1 + cost2);
+                a = 0;
+            j--;
             i++;
-        }
-        if(i == n)
-            return dp[start] = 0;
-        else
-            return dp[start] = ans;
-        
-        // int j = 0;
-        // int j = k;
-        // // while(i < n && nums[i] <= k-j)
-        // while(i < n && nums[i] <= j)
-        // {
-        //     // if(nums[i].size() > k-j)
-        //     //     break;
-        //     // j += nums[i];
-        //     j -= nums[i];
-        //     if(i < n-1)
-        //         a = min(a, recur(i+1, nums, k, dp) + j*j);
-        //         // a = min(a, recur(i+1, nums, k, dp) + (k-j)*(k-j));
-        //     else
-        //     {
-        //         a = 0;
-        //         break;
-        //     }
-        //     cout<<a<<" "<<i<<" "<<k-j<<endl;
-                
-        //     j--;
-        //     i++;
             
-        // }
-        // return dp[i] = a;
+        }
+        return dp[start] = a;
     }
     int solveWordWrap(vector<int>nums, int k) 
     { 
