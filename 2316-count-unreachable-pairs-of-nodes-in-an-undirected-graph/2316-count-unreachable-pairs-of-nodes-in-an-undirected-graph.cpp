@@ -35,20 +35,16 @@ public:
             sz[i] = 1;
         }
         for(auto x : edges)
-        {
             unionSet(x[0], x[1]);
-        }
-        unordered_set<int> st;
-        for(int i = 0; i < n; i++)
-        {
-            st.insert(findParent(i));
-        }
         ll siz = 0l;
         ll ans = 0l;
-        for(auto x : st)
+        for(int i = 0; i < n; i++)
         {
-            ans += siz*sz[x];
-            siz += sz[x];
+            if(i == findParent(i))
+            {
+                ans += siz*sz[i];
+                siz += sz[i];
+            }
         }
         return ans;
         
