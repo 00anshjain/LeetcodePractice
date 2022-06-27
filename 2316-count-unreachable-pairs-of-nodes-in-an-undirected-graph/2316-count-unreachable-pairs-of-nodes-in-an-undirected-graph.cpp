@@ -1,39 +1,56 @@
 class Solution {
 public:
     typedef long long ll;
-    int DFS(int u, vector<bool> &visited, vector<int> adj[])
+    vector<int> parent, sz;
+    int findParent(int a)
     {
-        visited[u] = true;
-        int ans = 1;
-        for(auto x : adj[u])
-        {
-            if(!visited[x])
-                ans += DFS(x, visited, adj);
-        }
-        return ans;
+        if(parent[a] == a)
+            return a;
+        return parent[a] = findParent(parent[a]);
     }
-    long long countPairs(int n, vector<vector<int>>& edges) {
-        vector<int> grps;
-        vector<int> adj[n];
-        for(auto x : edges)
+    void unionSet(int a, int b)
+    {
+        int p1 = findParent(a);
+        int p2 = findParent(b);
+        if(p1 != p2)
         {
-            adj[x[0]].push_back(x[1]);
-            adj[x[1]].push_back(x[0]);
-        }
-        vector<bool> visited(n, false);
-        ll ans = ((ll)n*(n-1))/2;
-        for(int i = 0; i < n; i++)
-        {
-            // grp_size = 0;
-            if(!visited[i])
+            if(sz[p1] >= sz[p2])
             {
-                ll grp_size = (ll)DFS(i, visited, adj);
-                ans -= ((grp_size)*(grp_size-1))/2;
-                // for(auto k : grps)
-                //    ans += k*(ll)grp_size;
-                // grps.push_back(grp_size);
+                parent[p2] = p1;
+                sz[p1] += sz[p2];
+            }
+            else
+            {
+                parent[p1] = p2;
+                sz[p2] += sz[p1];
             }
         }
+    }
+    long long countPairs(int n, vector<vector<int>>& edges) {
+        parent.resize(n);
+        sz.resize(n, 1);
+        for(int i = 0; i < n; i++)
+        {
+            parent[i] = i;
+            sz[i] = 1;
+        }
+        for(auto x : edges)
+        {
+            unionSet(x[0], x[1]);
+        }
+        unordered_set<int> st;
+        for(int i = 0; i < n; i++)
+        {
+            st.insert(findParent(i));
+        }
+        ll siz = 0l;
+        ll ans = 0l;
+        for(auto x : st)
+        {
+            ans += siz*sz[x];
+            siz += sz[x];
+        }
         return ans;
+        
     }
 };
