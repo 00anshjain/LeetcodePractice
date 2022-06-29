@@ -1,52 +1,49 @@
 class Solution {
 public:
     string reorganizeString(string s) {
-        int mx = 0;
-        int n = s.size();
         unordered_map<char, int> mp;
         for(auto c : s)
-        {
             mp[c]++;
-            mx = max(mx, mp[c]);
-        }
-        if(mx > (n+1)/2)
-            return "";
+        int n = s.size();
         priority_queue<pair<int, char>> pq;
+        char last = '0';
         for(auto x : mp)
             pq.push({x.second, x.first});
+        if(pq.top().first > (n+1)/2)
+            return "";
         string ans = "";
-        char last = 'A';
-        while(pq.size() > 1)
+        while(!pq.empty())
         {
-            char ch1 = pq.top().second;
-            int f1 = pq.top().first;
+            auto [f1, w1] = pq.top();
             pq.pop();
-            char ch2 = pq.top().second;
-            int f2 = pq.top().first;
+            if(pq.empty())
+            {
+                if(last == w1)
+                    return "";
+                ans += w1;
+                if(f1 > 1)
+                    return "";
+                return ans;
+            }
+            auto [f2, w2] = pq.top();
             pq.pop();
-            if(last != ch1)
+            if(last == w1)
             {
-                ans += ch1;
-                ans += ch2;
-                last = ch2;
-                
-            }
-            else
+                ans += w2;
+                ans += w1;
+            }else
             {
-                ans += ch2;
-                ans += ch1;
-                last = ch1;
-                
+                ans += w1;
+                ans += w2;
+                last = w2;
             }
-            if(f1-1 > 0)
-                pq.push({f1-1, ch1});
-            if(f2-1 > 0)
-                pq.push({f2-1, ch2});
-        }
-        if(!pq.empty())
-        {
-            ans += pq.top().second;
+            if(f1 > 1)
+                pq.push({f1-1, w1});
+            if(f2 > 1)
+                pq.push({f2-1, w2});
         }
         return ans;
+        
+        
     }
 };
