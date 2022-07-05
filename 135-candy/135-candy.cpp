@@ -2,29 +2,22 @@ class Solution {
 public:
     int candy(vector<int>& rat) {
         int n = rat.size();
-        priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-        for(int i = 0; i < n; i++)
+        vector<int> arr(n, 1);
+        // memeset(arr, 1, sizeof(arr));
+        // arr[0] = 1;
+        for(int i = 1; i < n; i++)
         {
-            pq.push({rat[i], i});
+            if(rat[i] > rat[i-1])
+                arr[i] = 1 + arr[i-1];
         }
-        vector<int> arr(n, 0);
-        int ans = 0;
-        while(!pq.empty())
+        for(int i = n-2; i >= 0; i--)
         {
-            auto [rating, i] = pq.top();
-            pq.pop();
-            int cdy = 1;
-            if(i-1 >= 0  && rat[i-1] < rat[i])
-            {
-                cdy = max(cdy, arr[i-1] + 1);
-            }
-            if(i+1 < n  && rat[i+1] < rat[i])
-            {
-                cdy = max(cdy, arr[i+1] + 1);
-            }
-            arr[i] = cdy;
-            ans += cdy;
+            if(rat[i] > rat[i+1])
+                arr[i] = max(arr[i], 1 + arr[i+1]);
         }
-        return ans;
+        // for(int i = 0; i< n; i++)
+        //     cout<<arr[i]<<" ";
+        return accumulate(arr.begin(), arr.end(), 0);
+        
     }
 };
