@@ -101,39 +101,48 @@ struct Node
 class Solution
 {
 public:
-    void inorder(Node* root, vector<int> &arr)
-    {
-        if(!root)
-            return;
-        if(root->left)
-            inorder(root->left, arr);
-        arr.push_back(root->data);
-        inorder(root->right, arr);
-    }
     int countPairs(Node* root1, Node* root2, int x)
     {
-        vector<int> a;
-        vector<int> b;
-        inorder(root1, a);
-        inorder(root2, b);
-        int i = 0, j = b.size()-1;
-        int n = a.size();
-        int ans = 0;
-        while(i < n && j >= 0)
+        stack<Node*> st1, st2;
+        int cnt = 0;
+        while(1)
         {
-            int sum = a[i] + b[j];
+            while(root1)
+            {
+                st1.push(root1);
+                root1 = root1->left;
+            }
+            while(root2)
+            {
+                st2.push(root2);
+                root2 = root2->right;
+            }
+            if(st1.empty() || st2.empty())
+                break;
+            
+            Node* top1 = st1.top();
+            Node* top2 = st2.top();
+            int sum = top1->data + top2->data;
             if(sum == x)
             {
-                ans++;
-                i++;
-                j--;
+                cnt++;
+                st1.pop();
+                st2.pop();
+                root1 = top1->right;
+                root2 = top2->left;
+            }
+            else if(sum < x)
+            {
+                root1 = top1->right;
+                st1.pop();
             }
             else if(sum > x)
-                j--;
-            else
-                i++;
+            {
+                root2 = top2->left;
+                st2.pop();
+            }
         }
-        return ans;
+        return cnt;
         
     }
 };
