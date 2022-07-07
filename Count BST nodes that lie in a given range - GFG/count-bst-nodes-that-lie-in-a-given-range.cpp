@@ -93,10 +93,10 @@ public:
             return 0;
         int ans = 0;
         if(root->data >= l && root->data <= h)
-            ans = 1;
-        if(root->data <= h)
+            ans = 1 + getCount(root->left, l, h) + getCount(root->right, l, h);
+        else if(root->data <= h)
             ans += getCount(root->right, l, h);
-        if(root->data >= l)
+        else if(root->data >= l)
             ans += getCount(root->left, l, h);
         return ans;
       // your code goes here   
