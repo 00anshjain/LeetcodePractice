@@ -17,16 +17,15 @@ public:
             return true;
         if(!inorder(root->left, prev))
             return false;
-        if(prev != NULL && root->val <= prev->val)
+        if(prev && prev->val >= root->val)
             return false;
         prev = root;
         return inorder(root->right, prev);
-        
     }
     bool isValidBST(TreeNode* root) {
         if(!root)
             return true;
-        TreeNode* prev =NULL;
+        TreeNode* prev = NULL;
         return inorder(root, prev);
     }
 };
