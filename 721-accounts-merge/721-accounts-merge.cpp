@@ -1,8 +1,6 @@
 class Solution {
 public:
-    unordered_map<string, int> emailToUid;
-    unordered_map<int, int> par;
-    unordered_map<int, string> UidToName, UidToEmail;
+    vector<int> par;
     int findPar(int i)
     {
         if(par[i] == i)
@@ -18,32 +16,37 @@ public:
     }
     vector<vector<string>> accountsMerge(vector<vector<string>>& accounts) {
         int uid = 0;
-        for(auto v : accounts)
+        int sz = accounts.size();
+        par.resize(sz);
+        unordered_map<string, int> emailToParent;
+        for(int i = 0; i < sz; i++)
+            par[i] = i;
+        for(int j = 0; j < sz; j++)
         {
+            vector<string> v = accounts[j];
             int n = v.size();
             string name = v[0];
             for(int i = 1; i < n; i++)
             {
-                if(emailToUid.find(v[i]) == emailToUid.end())
+                if(emailToParent.find(v[i]) == emailToParent.end())
                 {
-                    
-                    emailToUid[v[i]] = ++uid;
-                    UidToEmail[uid] = v[i];
-                    UidToName[uid] = name;
-                    par[uid] = uid;
-                    
+                    emailToParent[v[i]] = j;
+                    // emailToParent.insert(make_pair({v[i], j}));
                 }
-                int p1 = emailToUid[v[1]];
-                int p2 = emailToUid[v[i]];
-                getUnion(p1, p2);
+                // else
+                // {
+                    int p1 = emailToParent[v[i]];
+                    int p2 = emailToParent[v[1]];
+                    getUnion(p1, p2);
+                // }
             }
         }
         // cout<<uid<<endl;
-        unordered_map<int, vector<int>> mp;
-        for(int i = 1; i <= uid; i++)
+        unordered_map<int, vector<string>> mp;
+        for(auto x : emailToParent)
         {
-            int p = findPar(i);
-            mp[p].push_back(i);
+            int p = findPar(x.second);
+            mp[p].push_back(x.first);
         }
         // cout<<mp.size();
         vector<vector<string>> ans;
@@ -51,11 +54,18 @@ public:
         {
             
             vector<string> arr;
-            arr.push_back("");
-            for(auto v : x.second)
-                arr.push_back(UidToEmail[v]);
-            sort(arr.begin(), arr.end());
-            arr[0] = UidToName[x.first];
+            arr.push_back(accounts[x.first][0]);
+            sort(x.second.begin(), x.second.end());
+            for(auto y : x.second)
+            {
+                arr.push_back(y);
+            }
+            // arr.push_back(x.second);
+            // arr.push_back("");
+            // for(auto v : x.second)
+            //     arr.push_back(UidToEmail[v]);
+            // sort(arr.begin(), arr.end());
+            // arr[0] = UidToName[x.first];
             ans.push_back(arr);
         }
         return ans;
