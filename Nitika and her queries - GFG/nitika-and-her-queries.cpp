@@ -7,29 +7,49 @@ using namespace std;
  // } Driver Code Ends
 // User function Template for C++
 
+
+const int mxi = 1e5+2;
 class Solution{
 public:
-    vector<int> specialXor(int N, int Q, int a[], vector<int> query[])
+    int seg[4*mxi];
+    void buildSeg(int arr[], int idx, int l, int r)
     {
-        int b[N];
-        b[0] = a[0];
-        for(int i = 1; i < N; i++)
-            b[i] = a[i]^b[i-1];
-        vector<int> res;
-        for(int k = 0; k < Q; k++)
+        if(l == r)
         {
-            int ans = b[N-1];
-            int i = query[k][0];
-            int j = query[k][1];
-            i--;
-            j--;
-            if(i > 0)
-                ans ^= b[i-1];
-            if(j >= 0)
-                ans ^= b[j];
-            res.push_back(ans);
+            seg[idx] = arr[l];
+            return;
         }
-        return res;
+        int mid = (l+r)/2;
+        buildSeg(arr, 2*idx+1, l, mid);
+        buildSeg(arr, 2*idx+2, mid+1, r);
+        seg[idx] = seg[2*idx+1]^seg[2*idx+2];
+    }
+    //we have to find xor of l to r
+    int getAns(int idx, int low, int high, int l, int r)
+    {
+        if(l > high || r < low)
+            return 0;
+        if(l <= low && r >= high)
+            return seg[idx];
+        int mid = (low+high)/2;
+        int op1 = getAns(2*idx+1, low, mid, l, r);
+        int op2 = getAns(2*idx+2, mid+1, high, l, r);
+        return op1^op2;
+    }
+    vector<int> specialXor(int n, int q, int arr[], vector<int> query[])
+    {
+        buildSeg(arr, 0, 0, n-1);
+        int XOR = 0;
+        for(int i = 0; i< n; i++)
+            XOR ^= arr[i];
+        vector<int> ans;
+        for(int k = 0; k < q; k++)
+        {
+            int low = query[k][0]-1;
+            int high = query[k][1]-1;
+            ans.push_back(XOR^getAns(0, 0, n-1, low, high));
+        }
+        return ans;
         // code here
     }
 }; 
