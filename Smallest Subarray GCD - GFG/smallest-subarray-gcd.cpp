@@ -50,21 +50,48 @@ public:
     //   cout<<"Tree in progress"<<endl;
        buildSeg(seg, arr, 0, 0, n-1);
     //   cout<<"Tree made"<<endl;
-       for(int sz = 1; sz <= n; sz++)
-       {
-           int i = 0;
-           int j = sz-1;
-           while(j < n)
-           {
-              if(getQuery(seg, 0, 0, n-1, i, j) == g)
-              {
-                return sz;
-              }
-                i++;
-                j++;
+        for(int i = 0; i < n; i++)
+        {
+            if(arr[i] == g)
+                return 1;
+        }
+        int ans = n+1;
+        for(int start = 0; start < n; start++)
+        {
+            if(arr[start] %g != 0)
+                continue;
+            int low = start+1, high = n-1;
+            while(low <= high)
+            {
+                int mid = (low+high)/2;
+                int z = getQuery(seg, 0, 0, n-1, start, mid);
+                if(z > g)
+                    low = mid+1;
+                else if(z < g)
+                    high = mid - 1;
+                else
+                {
+                    ans = min(ans, mid-start+1);
+                    high = mid - 1;
+                }
             }
-       }
-       return -1;
+        }
+        return ans == n+1 ? -1: ans;
+    //   for(int sz = 1; sz <= n; sz++)
+    //   {
+    //       int i = 0;
+    //       int j = sz-1;
+    //       while(j < n)
+    //       {
+    //           if(getQuery(seg, 0, 0, n-1, i, j) == g)
+    //           {
+    //             return sz;
+    //           }
+    //             i++;
+    //             j++;
+    //         }
+    //   }
+    //   return -1;
         // code here
     }
 };
