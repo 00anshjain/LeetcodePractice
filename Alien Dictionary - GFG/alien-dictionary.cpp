@@ -9,41 +9,54 @@ using namespace std;
 
 class Solution{
     public:
-    void DFS(int u, vector<bool> &visited, string &ans, vector<int> adj[])
-    {
-        visited[u] = true;
-        for(auto x : adj[u])
+    string findOrder(string arr[], int n, int k) {
+        // unordered_map<char, int> mp;
+        // for(int i = 'a'; i <= 'a' + k; i++)
+        //     mp[i] = a-'a';
+        vector<int> indegree(k, 0);
+        vector<int> adj[k];
+        for(int i = 0; i < n-1; i++)
         {
-            if(!visited[x])
-                DFS(x, visited, ans, adj);
-        }
-        char ch = u+'a';
-        ans = ch + ans;
-        
-    }
-    string findOrder(string dict[], int N, int K) {
-        vector<int> adj[K];
-        for(int i = 0; i < N-1; i++)
-        {
-            string w = dict[i];
-            string s = dict[i+1];
-            for(int j = 0; j < min(w.size(), s.size()); j++)
-            {
-                if(w[j] != s[j])
+            int j = i+1;
+            
+            // for(int j = i+1; j < n; j++)
+            // {
+                string w1 = arr[i];
+                string w2 = arr[j];
+                int itr1=0, itr2=0;
+                while(itr1 < w1.size() && itr2 < w2.size() && w1[itr1] == w2[itr2])
                 {
-                    adj[w[j]-'a'].push_back(s[j]-'a');
-                    break;
+                    itr1++;
+                    itr2++;
                 }
+                if(itr1 >= w1.size() || itr2 >= w2.size())
+                    continue;
+                    
+                indegree[w2[itr2] - 'a']++;
+                adj[w1[itr1] - 'a'].push_back(w2[itr2] - 'a');
+            // }
+        }
+        string ans = "";
+        queue<int> q;
+        for(int i = 0; i < k; i++)
+        {
+            if(indegree[i] == 0)
+            {
+                // ans.push_back(i = 'a');
+                q.push(i);
             }
         }
-        // now we apply topo sort
-        // stack<int> st;
-        vector<bool> visited(K, false);
-        string ans = "";
-        for(int i = 0; i < K; i++)
+        while(!q.empty())
         {
-            if(!visited[i])
-                DFS(i, visited, ans, adj);
+            int t = q.front();
+            ans += (t + 'a');
+            q.pop();
+            for(auto x : adj[t])
+            {
+                indegree[x]--;
+                if(indegree[x] == 0)
+                    q.push(x);
+            }
         }
         // cout<<ans<<endl;
         return ans;
