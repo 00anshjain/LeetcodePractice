@@ -11,51 +11,46 @@
  */
 class Solution {
 public:
-    TreeNode* DFS(TreeNode* root, int x, int *ht)
-    {
-        if(!root)
-            return NULL;
-        if(root->val == x)
-        {
-            return root;
-        }
-        
-        if(root->left && root->left->val == x)
-        {
-            // ht += 1;
-            (*ht) += 1;
-            return root;
-        }
-        if(root->right && root->right->val == x)
-        {
-            (*ht) += 1;
-            return root;
-        }
-        // ht += 1;
-        if(root->left)
-        {
-            (*ht) += 1;
-            auto k = DFS(root->left, x, ht);
-            if(k != NULL)
-                return k;
-            (*ht) -= 1;
-        }
-        if(root->right)
-        {
-            (*ht) += 1;
-            auto k = DFS(root->right, x, ht);
-            if(k != NULL)
-                return k;
-            (*ht) -= 1;   
-        }
-        return NULL;
-        
-    }
     bool isCousins(TreeNode* root, int x, int y) {
-        int h1 = 0, h2 = 0;
-        TreeNode* a = DFS(root, x, &h1);
-        TreeNode* b = DFS(root, y, &h2);
-        // cout<<h1<<" "<<h2<<endl;
-        return (a != b) && (h1 == h2);
+        queue<TreeNode*> q;
+        q.push(root);
+        while(!q.empty())
+        {
+            int n = q.size();
+            int cnt = 0;
+            while(n--)
+            {
+                auto t = q.front();
+                q.pop();
+                // if(t->left && t-> right && ((t->left->val == x) || (t->left->val == y)) && t->right->val == (x+y-(t->left->val)))
+                //     return false;
+                if(t->left)
+                {
+                    if(t->left->val == x || t->left->val == y)
+                    {
+                        cnt++;
+                        if(t->right && (t->right->val ==x || t->right->val == y))
+                            return false;
+                    } 
+                    if(cnt == 0)
+                        q.push(t->left);
+                }
+                if(t->right)
+                {
+                    if(t->right->val == x || t->right->val == y)
+                    {
+                        cnt++;
+                    } 
+                    if(cnt == 0)
+                        q.push(t->right);
+                }
+                if(cnt == 2)
+                    return true;
+            }
+            if(cnt > 0)
+                return false;
+        }
+        return false;
+        
     }
 };
