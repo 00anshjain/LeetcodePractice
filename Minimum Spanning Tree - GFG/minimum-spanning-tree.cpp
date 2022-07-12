@@ -9,32 +9,33 @@ class Solution
 {
 	public:
 	//Function to find sum of weights of edges of the Minimum Spanning Tree.
+    typedef pair<int, int> pii;
+    // typedef pair<int, pair<int, int>> piii;
     int spanningTree(int n, vector<vector<int>> adj[])
     {
-        // int dist = 0;
-        int curr = 0;
-        vector<int> dist(n, INT_MAX);
-        dist[0] = 0;
-        int ans = 0;
+        priority_queue<pii, vector<pii>, greater<pii>> pq;
         vector<bool> visited(n, false);
-        while(1)
+        pq.push({0, 0});
+        int ans = 0;
+        while(!pq.empty())
         {
-            visited[curr] = true;
-            for(auto x : adj[curr])
+            pii p = pq.top();
+            int d = p.first;
+            int u = p.second;
+            pq.pop();
+            if(visited[u])
+                continue;
+            visited[u] = true;
+            ans += d;
+            for(auto vec : adj[u])
             {
-                if(visited[x[0]])
-                    continue;
-                dist[x[0]] = min(dist[x[0]], x[1]);
+                int v = vec[0];
+                int dis = vec[1];
+                if(!visited[v])
+                    pq.push({dis, v});
             }
-            curr = min_element(dist.begin(), dist.end()) - dist.begin();
-            if(dist[curr] == INT_MAX)
-                return ans;
-            // cout<<curr<<" "<<dist[curr]<<endl;
-            ans += dist[curr];
-            dist[curr] = INT_MAX;
         }
-        return 0;
-        // code here
+        return ans;
     }
 };
 
