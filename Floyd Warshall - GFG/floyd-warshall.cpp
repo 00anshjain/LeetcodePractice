@@ -9,23 +9,28 @@ using namespace std;
 
 class Solution {
   public:
-	void shortest_distance(vector<vector<int>>&matrix){
-	    // Code here
-	    for(int k = 0; k < matrix.size(); k++)
+	void shortest_distance(vector<vector<int>>&mat){
+	    int n = mat.size();
+	    for(int k = 0; k < n; k++)//intermediate vertex
 	    {
-	        for(int i = 0; i < matrix.size(); i++)
+	        for(int i = 0; i < n; i++)
 	        {
-	            for(int j = 0; j < matrix.size(); j++)
+	            for(int j = 0; j < n; j++)
 	            {
-	                if(matrix[i][k] == -1 || matrix[k][j] == -1)
+	                if(k == i || k == j)
 	                    continue;
-	                if(matrix[i][j] == -1)
-	                    matrix[i][j] = matrix[i][k] + matrix[k][j];
-	                else
-	                    matrix[i][j] = min(matrix[i][j], matrix[i][k] + matrix[k][j]);
+	                if(mat[i][k] != -1 && mat[k][j] != -1)
+	                {
+	                    if(mat[i][j] == -1)
+	                        mat[i][j] = mat[i][k] + mat[k][j];
+                       else
+	                        mat[i][j] = min(mat[i][j], mat[i][k] + mat[k][j]);    
+	                }
 	            }
 	        }
 	    }
+	    
+	    // Code here
 	}
 };
 
