@@ -5,36 +5,33 @@ using namespace std;
  // } Driver Code Ends
 class Solution {
 public:
-    bool getColored(int u, vector<int>& color, vector<int> adj[], int col)
+    bool recur(vector<int>& color, int u, int c, vector<int>adj[])
     {
-        color[u] = col;
+        color[u] = c;
         for(auto x : adj[u])
         {
-            if(color[x] != -1)
+            if(color[x] == -1)
             {
-                if(color[x] == col)
+                if(!recur(color, x, 1-c, adj))
                     return false;
             }
-            else
-            {
-                if(!getColored(x, color, adj, 1 - col))
-                    return false;
-            }
+            else if(color[x] == c)
+                return false;
         }
         return true;
     }
 	bool isBipartite(int n, vector<int>adj[]){
-	    // Code here
 	    vector<int> color(n, -1);
 	    for(int i = 0; i < n; i++)
 	    {
 	        if(color[i] == -1)
 	        {
-    	        if(!getColored(i, color, adj, 0))
-    	            return false;
+	            if(!recur(color, i, 0, adj))
+	                return false;
 	        }
 	    }
 	    return true;
+	    // Code here
 	}
 
 };
