@@ -6,46 +6,35 @@ using namespace std;
  // } Driver Code Ends
 // Function to determine if graph can be coloured with at most M colours such
 // that no two adjacent vertices of graph are coloured with same colour.
-bool isSafe(int u, int c, bool graph[101][101], vector<int>& color, int n)
+bool isSafe(int c, vector<int> &color, bool graph[101][101], int i, int n)
 {
-    for(int i = 0; i < n; i++)
+    for(int j = 0; j < n; j++)
     {
-        // if(i == u)
-        //     continue;
-        if(graph[u][i] && color[i] == c)
+        if(graph[i][j] && color[j] == c)
             return false;
     }
     return true;
+    
 }
-bool getColored(int u, bool graph[101][101], int m, int n, vector<int>& color)
+bool recur(bool graph[101][101], int m, int u, int n, vector<int>& color)
 {
-    if(u == n)
+    if(u == -1)
         return true;
     for(int i = 0; i < m; i++)
     {
-        if(isSafe(u, i, graph, color, n))
+        if(isSafe(i, color, graph, u, n))
         {
             color[u] = i;
-            if(getColored(u+1, graph, m, n, color))
+            if(recur(graph, m, u-1, n, color))
                 return true;
+            color[u] = -1;
         }
     }
-    color[u] = -1;
     return false;
 }
 bool graphColoring(bool graph[101][101], int m, int n) {
     vector<int> color(n, -1);
-    // for(int i = 1; i <= n; i++)
-    // {
-        // if(color[i] == -1)
-        // {
-            // if(!getColored(i, graph, m, n, color))
-            //     return false;
-        // }
-    // }
-    return getColored(0, graph, m, n, color);
-    // return true;
-    // your code here
+    return recur(graph, m, n-1, n, color);
 }
 
 // { Driver Code Starts.
