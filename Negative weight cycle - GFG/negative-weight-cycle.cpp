@@ -8,22 +8,21 @@ public:
 	int isNegativeWeightCycle(int n, vector<vector<int>>edges){
 	    vector<int> dist(n, INT_MAX);
 	    dist[0] = 0;
-	    for(int i = 0; i < n; i++)
+	    for(int t = 0; t < n; t++)
 	    {
 	        bool flag = false;
 	        for(auto x : edges)
 	        {
-	            int u = x[0];
-	            int v = x[1];
-	            int w = x[2];
-	            if(dist[u] != INT_MAX && dist[u] + w < dist[v])
+	            if(dist[x[0]] != INT_MAX && dist[x[1]] > dist[x[0]] + x[2])
 	            {
-	                dist[v] = dist[u] + w;
 	                flag = true;
+	                dist[x[1]] = dist[x[0]] + x[2];
+	               // cout<<x[1]<<" "<<x[0]<<
 	            }
 	        }
 	        if(!flag)
 	            return false;
+	        
 	    }
 	    return true;
 	    // Code here
