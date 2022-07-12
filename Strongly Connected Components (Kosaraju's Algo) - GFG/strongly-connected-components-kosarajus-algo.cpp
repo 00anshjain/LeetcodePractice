@@ -9,56 +9,53 @@ class Solution
 {
 	public:
 	//Function to find number of strongly connected components in the graph.
-    void DFS1(int u, stack<int> &st, vector<int> adj[], vector<bool>& visited)
+    void DFS(int i, vector<int> adj[], stack<int> &st, vector<bool> &visited)
     {
-        visited[u] = true;
-        for(auto x : adj[u])
+        visited[i] = true;
+        for(auto v : adj[i])
         {
-            if(!visited[x])
-                DFS1(x, st, adj, visited);
+            if(!visited[v])
+                DFS(v, adj, st, visited);
         }
-        st.push(u);
+        st.push(i);
     }
-    void DFS2(int u, vector<bool> &visited, vector<int> adj[])
+    void DFS2(vector<bool> &visited, int u, vector<int> adj[])
     {
         visited[u] = true;
         for(auto x : adj[u])
         {
             if(!visited[x])
-                DFS2(x, visited, adj);
+                DFS2(visited, x, adj);
         }
     }
     int kosaraju(int n, vector<int> adj[])
     {
-        stack<int> st1;
+        stack<int> st;
         vector<bool> visited(n, false);
         for(int i = 0; i < n; i++)
         {
             if(!visited[i])
-                DFS1(i, st1, adj, visited);
+                DFS(i, adj, st, visited);
         }
-        // so we have got stack1
-        // now we reverse edges to check strongly connected components
         vector<int> g[n];
         for(int i = 0; i < n; i++)
         {
             for(auto x : adj[i])
-            {
                 g[x].push_back(i);
-            }
         }
-        int stronglyConnected = 0;
         vector<bool> visited2(n, false);
-        while(!st1.empty())
+        int ans = 0;
+        while(!st.empty())
         {
-            if(!visited2[st1.top()])
+            auto t = st.top();
+            st.pop();
+            if(!visited2[t])
             {
-                stronglyConnected++;
-                DFS2(st1.top(), visited2, g);
+                ans++;
+                DFS2(visited2, t, g);
             }
-            st1.pop();
         }
-        return stronglyConnected;
+        return ans;
         //code here
     }
 };
