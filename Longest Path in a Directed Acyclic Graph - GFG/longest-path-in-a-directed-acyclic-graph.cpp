@@ -10,35 +10,46 @@ using namespace std;
 class Solution
 {
     public:
+    typedef pair<int, int> pii;
+    void toposort(int u, stack<int> &st, vector<bool> &visited, vector<pii> adj[])
+    {
+        visited[u] = true;
+        for(auto x : adj[u])
+        {
+            int v = x.first;
+            if(!visited[v])
+                toposort(v, st, visited, adj);
+        }
+        st.push(u);
+    }
     vector <int> maximumDistance(vector<vector<int>> edges,int n,int e,int S)
     {
               
+        //trying with TopoSort, to get Answer in O(n+e) time 
+        // dijkstra takes time nlogn;
         vector<pair<int, int>> adj[n];
+        vector<int> inDegree(n, 0);
         for(auto x : edges)
         {
             adj[x[0]].push_back({x[1], x[2]});
         }
-        priority_queue<pair<int, int>> pq;
-        pq.push({0, S});
+        stack<int> st;
+        vector<bool> visited(n, false);
+        toposort(S, st, visited, adj);
         vector<int> dist(n, INT_MIN);
         dist[S] = 0;
-        while(!pq.empty())
+        while(!st.empty())
         {
-            auto p = pq.top();
-            int d = p.first;
-            int u = p.second;
-            pq.pop();
-            if(dist[u] > d)
+            int t = st.top();
+            st.pop();
+            if(dist[t] == INT_MIN)
                 continue;
-            for(pair<int, int> p : adj[u])
+            for(auto x : adj[t])
             {
-                int v = p.first;
-                int duv = p.second;
-                if(dist[u] != INT_MIN && dist[v] < d + duv)
-                {
-                    dist[v] = d + duv;
-                    pq.push({dist[v], v});
-                }
+                int v = x.first;
+                int d = x.second;
+                if(dist[v] < dist[t] + d)
+                    dist[v] = dist[t] + d;
             }
         }
         return dist;
