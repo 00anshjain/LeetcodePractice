@@ -1,33 +1,20 @@
 class Solution {
 public:
-    typedef vector<int> vi;
     int findCheapestPrice(int n, vector<vector<int>>& flights, int src, int dst, int k) {
-        vector<pair<int, int>> adj[n];
-        for(auto x : flights)
-            adj[x[0]].push_back({x[1], x[2]});
-        priority_queue<vi, vector<vi>, greater<vi>> pq;
-        vector<int> start = {0, src, k+1};
-        pq.push(start);
-        vector<vector<bool>> visited(n, vector<bool>(k+2, false));
-        while(!pq.empty())
+        vector<int> prices(n, INT_MAX);
+        prices[src] = 0;
+        for(int i = 0; i <= k; i++)
         {
-            vector<int> v = pq.top();
-            pq.pop();
-            if(visited[v[1]][v[2]])
-                continue;
-            visited[v[1]][v[2]] = true;
-            // cout<<v[1]<<" "<<v[0]<<" "<<v[2]<<endl;
-            if(v[1] == dst)
-                return v[0];
-            if(v[2] == 0)
-                continue;
-            for(auto x : adj[v[1]])
+            vector<int> pri(prices.begin(), prices.end());
+            for(auto x : flights)
             {
-                int newPt = x.first;
-                int newd = x.second;
-                pq.push({v[0] + newd, newPt, v[2] - 1});
+                if(prices[x[0]] != INT_MAX)
+                    pri[x[1]] = min(prices[x[0]] + x[2], pri[x[1]]);
             }
+            prices = pri;
         }
-        return -1;
+        if(prices[dst] == INT_MAX)
+            return -1;
+        return prices[dst];
     }
 };
