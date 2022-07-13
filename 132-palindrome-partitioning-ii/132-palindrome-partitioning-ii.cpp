@@ -1,27 +1,47 @@
 class Solution {
 public:
-    int minCut(string s) {
-        int n = s.size();
-        int cut[n];
-        for(int i = 0; i < n; i++)
-            cut[i] = i;
-        //to find out how many cut needed for string of size i 
-        vector<vector<bool>> dp(n, (vector<bool>(n, false)));
-        for(int j = 0; j < n; j++)  // string start se end tak h,  end = j
+    int n;
+    int recur(string &s, int i, vector<int> &dp, vector<vector<bool>>& palin)
+    {
+        if(i == n)
+            return 0;
+        if(dp[i] != -1)
+            return dp[i];
+        int ans = INT_MAX;
+        for(int j = i; j < n; j++)
         {
-            for(int i = j; i >= 0; i--)     // start changing;
+            if(palin[i][j])
             {
-                if(s[i] == s[j] && ((j - i + 1 <= 2) || dp[i+1][j-1]))
-                {
-                    dp[i][j] = true;
-                    if(i != 0)
-                        cut[j] = min(cut[j], cut[i-1] + 1);
-                    else
-                        cut[j] = 0;
-                        // i = 0 mtlb starting se yaha tak aaye koi cut nhi lagana pada
-                }
+                int k = recur(s, j+1, dp, palin);
+                if(k != INT_MAX)
+                    ans = min(ans, 1+k);
             }
         }
-        return cut[n-1];
+        // if(ans == INT_MAX)
+        //     return dp[i] = INT_MAX;
+        return dp[i] = ans;
+    }
+    int minCut(string s) {
+        n = s.size();
+        vector<vector<bool>> palin(n, vector<bool>(n, false));
+        for(int i = 0; i < n; i++)
+        {
+            palin[i][i] = true;
+            if(i+1 < n && (s[i] == s[i+1]))
+            {
+                palin[i][i+1] = true;
+            }
+        }
+        for(int i = n-3; i >= 0; i--)
+        {
+            for(int j = i+2; j<n; j++)
+            {
+                if(s[i] == s[j])
+                    palin[i][j] = palin[i+1][j-1];
+            }
+        }
+        
+        vector<int> dp(n, -1);
+        return recur(s, 0, dp, palin)-1;
     }
 };
