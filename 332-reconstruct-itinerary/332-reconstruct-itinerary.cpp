@@ -1,50 +1,27 @@
 class Solution {
 public:
-    // typedef tup;
-    vector<string> ans;
-    bool flag = false;
-    void recur(vector<string> &path, string curr, int totalFlights, map<string, map<string, int>>& adj)
-    {
-        if(flag)
-            return;
-        path.push_back(curr);
-        if(totalFlights == 0)
+    vector<string> findItinerary(vector<vector<string>>& tickets) {
+        map<string, multiset<string>> mp;
+        for(auto x : tickets)
+            mp[x[0]].insert(x[1]);
+        stack<string> st;
+        vector<string> res;
+        st.push("JFK");
+        while(!st.empty())
         {
-            ans = path;
-            flag = true;
-            return;
-        }
-        auto p = adj[curr];
-        {
-            for(auto x : p)
+            string k = st.top();
+            if(mp[k].empty())
             {
-                string v = x.first;
-                int cnt = x.second;
-                if(cnt > 0)
-                {
-                    adj[curr][v]--;
-                    recur(path, v, totalFlights-1, adj);
-                    if(flag)
-                        return;
-                    adj[curr][v]++;
-                }
+                res.push_back(k);
+                st.pop();
+            }
+            else
+            {
+                st.push(*mp[k].begin());
+                mp[k].erase(mp[k].begin());
             }
         }
-        path.pop_back();
-        return;
-    }
-    vector<string> findItinerary(vector<vector<string>>& tickets) {
-        int totalFlights = tickets.size();
-        map<string, map<string, int>> adj;
-        flag = false;
-        for(auto x : tickets)
-        {
-            adj[x[0]][x[1]]++;
-        }
-        
-        vector<string> path;
-        string curr = "JFK";
-        recur(path, curr, totalFlights, adj);
-        return ans;
+        reverse(res.begin(), res.end());
+        return res;
     }
 };
