@@ -9,25 +9,38 @@ class Solution
 {
     public:
     //Function to find a Mother Vertex in the Graph.
-	void DFS(int u, vector<bool> &visited, int &cnt, vector<int>adj[])
+	void DFS(int u, vector<bool> &visited, vector<int>adj[])
 	{
 	    visited[u] = true;
-	    cnt++;
+	   // cnt++;
 	    for(auto x : adj[u])
 	    {
 	        if(!visited[x])
-	            DFS(x, visited, cnt, adj);
+	            DFS(x, visited, adj);
 	    }
 	}
 	int findMotherVertex(int V, vector<int>adj[])
 	{
+	    vector<bool> visited(V, false);
 	    for(int i = 0; i < V; i++)
 	    {
-	        vector<bool> visited(V, false);
-	        int cnt = 0;
-	        DFS(i, visited, cnt, adj);
-	        if(cnt == V)
+	        if(!visited[i])
+	        {
+	            vector<bool> g(V, false);
+	            int cnt = 0;
+	            DFS(i, g, adj);
+	            if(cnt == V)
 	            return i;
+    	        for(int i = 0; i < V; i++)
+    	        {
+    	            visited[i] = visited[i] || g[i];
+    	            if(g[i])
+    	                cnt++;
+    	        }
+    	        if(cnt == V)
+    	            return i;
+	        }
+	        
 	    }
 	    return -1;
 	    // Code here
