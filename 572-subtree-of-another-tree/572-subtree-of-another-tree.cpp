@@ -11,37 +11,21 @@
  */
 class Solution {
 public:
-    bool isSubTree(TreeNode* root, TreeNode* subRoot, bool flag) {
-        if(!root && !subRoot)
+    bool check(TreeNode* root, TreeNode* subroot)
+    {
+        if(!root && !subroot)
             return true;
-        if(!root || !subRoot)
+        if(!root || !subroot)
             return false;
-        // if(!subRoot)
-        //     return false;
-        if(subRoot->val == root->val)
-        {
-            // cout<<root->val<<" ";
-            if(isSubTree(root->left, subRoot->left, true) && (isSubTree(root->right, subRoot->right, true)))
-                return true;
-        }
-        if(flag == true)
-            return false;
-        return isSubTree(root->left, subRoot, false) || (isSubTree(root->right, subRoot, false));
+        if(root->val == subroot->val)
+            return check(root->left, subroot->left) && check(root->right, subroot->right); 
+        return false;
     }
-    bool isSubtree(TreeNode* root, TreeNode* subRoot) {
-        return isSubTree(root, subRoot, false);
-        // if(!root && !subRoot)
-        //     return true;
-        // if(!root || !subRoot)
-        //     return false;
-        // // if(!subRoot)
-        // //     return false;
-        // if(subRoot->val == root->val)
-        // {
-        //     cout<<root->val<<" ";
-        //     if(isSubtree(root->left, subRoot->left) && (isSubtree(root->right, subRoot->right)))
-        //         return true;
-        // }
-        // return isSubtree(root->left, subRoot) || (isSubtree(root->right, subRoot));
+    bool isSubtree(TreeNode* root, TreeNode* subroot) {
+        if(!root && !subroot)
+            return true;
+        if(!root || !subroot)
+            return false;
+        return check(root, subroot) || isSubtree(root->left, subroot) || isSubtree(root->right, subroot);
     }
 };
