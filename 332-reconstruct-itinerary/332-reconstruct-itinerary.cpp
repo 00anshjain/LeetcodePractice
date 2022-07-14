@@ -3,46 +3,31 @@ public:
     // typedef tup;
     vector<string> ans;
     bool flag = false;
-    void recur(vector<string> &path, string curr, int totalFlights, set<string>& all, map<pair<string, string>, int>& mp)
+    void recur(vector<string> &path, string curr, int totalFlights, map<string, map<string, int>>& adj)
     {
         if(flag)
             return;
         path.push_back(curr);
         if(totalFlights == 0)
         {
-            // if(ans.size() == 0)
-                ans = path;
-                flag = true;
-                return;
-            // else
-            // {
-            //     int sz = path.size();
-            //     // cout<<path.size()<<endl;
-            //     for(int i = 0; i < sz; i++)
-            //     {
-            //         // cout<<path[i]<<" "<<ans[i]<<endl;
-            //         if(path[i] < ans[i])
-            //         {
-            //             // cout<<" changed"<<endl;
-            //             ans = path;
-            //             break;
-            //         }
-            //         else if(path[i] > ans[i])
-            //             break;
-            //     }
-            // }
-            path.pop_back();
+            ans = path;
+            flag = true;
             return;
         }
-        for(auto x: all)
+        auto p = adj[curr];
         {
-            if(mp[{curr, x}] > 0)
+            for(auto x : p)
             {
-                mp[{curr, x}]--;
-                recur(path, x, totalFlights-1, all, mp);
-                if(flag)
-                    return;
-                mp[{curr, x}]++;
+                string v = x.first;
+                int cnt = x.second;
+                if(cnt > 0)
+                {
+                    adj[curr][v]--;
+                    recur(path, v, totalFlights-1, adj);
+                    if(flag)
+                        return;
+                    adj[curr][v]++;
+                }
             }
         }
         path.pop_back();
@@ -50,19 +35,16 @@ public:
     }
     vector<string> findItinerary(vector<vector<string>>& tickets) {
         int totalFlights = tickets.size();
-        set<string> allVertices;
-        map<pair<string, string>, int> mp;
+        map<string, map<string, int>> adj;
         flag = false;
         for(auto x : tickets)
         {
-            allVertices.insert(x[0]);
-            allVertices.insert(x[1]);
-            mp[make_pair(x[0], x[1])]++;
+            adj[x[0]][x[1]]++;
         }
         
         vector<string> path;
         string curr = "JFK";
-        recur(path, curr, totalFlights, allVertices, mp);
+        recur(path, curr, totalFlights, adj);
         return ans;
     }
 };
