@@ -9,43 +9,46 @@ class Solution
 {
     public:
     //Function to find a Mother Vertex in the Graph.
-	void DFS(int u, vector<bool> &visited, vector<int>adj[])
+	void DFS(int u, vector<bool> &visited, int &cnt, vector<int>adj[])
 	{
 	    visited[u] = true;
-	   // cnt++;
+	    cnt++;
+	   // cout<<u<<endl;
 	    for(auto x : adj[u])
 	    {
 	        if(!visited[x])
-	            DFS(x, visited, adj);
+	            DFS(x, visited, cnt, adj);
 	    }
 	}
 	int findMotherVertex(int V, vector<int>adj[])
 	{
 	    vector<bool> visited(V, false);
+        int cnt = 0;
+        int canMother = 0;
 	    for(int i = 0; i < V; i++)
 	    {
 	        if(!visited[i])
 	        {
-	            vector<bool> g(V, false);
-	            int cnt = 0;
-	            DFS(i, g, adj);
-	            if(cnt == V)
-	            return i;
-    	        for(int i = 0; i < V; i++)
-    	        {
-    	            visited[i] = visited[i] || g[i];
-    	            if(g[i])
-    	                cnt++;
-    	        }
+    	        DFS(i, visited, cnt, adj);
     	        if(cnt == V)
-    	            return i;
+    	        {
+    	           // cout<<cnt<<endl;
+    	           // cout<<"Mother"<<i<<endl;
+    	            canMother = i;
+    	            break;
+	            }
 	        }
-	        
 	    }
+	   // visited.resize(V, false);
+	   vector<bool> g(V, false);
+	    cnt = 0;
+	    DFS(canMother, g, cnt, adj);
+	   // cout<<cnt<<endl;
+	    if(cnt == V)
+	        return canMother;
 	    return -1;
 	    // Code here
 	}
-
 };
 
 // { Driver Code Starts.
