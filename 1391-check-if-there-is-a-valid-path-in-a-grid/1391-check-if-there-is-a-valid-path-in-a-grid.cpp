@@ -15,17 +15,22 @@ public:
             if(x == n-1 && y == m-1) //placed inside if conditon so that parent is verified of the current cell
                 return true;
             grid[x][y] = 0;
-            return check(x + dir[k][1].first, y + dir[k][1].second, x, y, dir, grid);
+            if(check(x + dir[k][1].first, y + dir[k][1].second, x, y, dir, grid))
+                return true;
+            grid[x][y] = k;
         }
         else if(parx == x + dir[k][1].first && pary == y + dir[k][1].second)
         {
+            
             if(x == n-1 && y == m-1)//placed inside if conditon so that parent is verified of the current cell
                 return true;
             grid[x][y] = 0;
-            return check(x + dir[k][0].first, y + dir[k][0].second, x, y, dir, grid);
+            if(check(x + dir[k][0].first, y + dir[k][0].second, x, y, dir, grid))
+                return true;
+            grid[x][y] = k;
         }
-        else
-            return false;
+        // else
+        return false;
     }
     bool hasValidPath(vector<vector<int>>& grid) {
         map<int, vector<pair<int, int>>> dir;
@@ -47,13 +52,8 @@ public:
         int x = 0, y = 0;
         if(x == n-1 && y == m-1)
             return true;
-        vector<vector<int>> a, b, c, d;
-        a = grid;
-        b = grid;
-        c = grid;
-        d = grid;
         
-        return check(0, 0, -1, 0, dir, a) || check(0, 0, 0, -1, dir, b) || 
-            check(0, 0, 1, 0, dir, c) ||check(0, 0, 0, 1, dir, d) ;
+        return check(0, 0, -1, 0, dir, grid) || check(0, 0, 0, -1, dir, grid) || 
+            check(0, 0, 1, 0, dir, grid) ||check(0, 0, 0, 1, dir, grid) ;
     }
 };
