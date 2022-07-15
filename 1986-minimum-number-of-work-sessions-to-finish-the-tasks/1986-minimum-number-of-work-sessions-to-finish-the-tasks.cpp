@@ -1,49 +1,40 @@
 class Solution {
 public:
-    int ans = INT_MAX;
     int n;
-    int taken[1<<15][16];
-    int recur(vector<int>& tasks, int &sessionTime, int currSessTime, int mask)
+    bool ok(vector<int> &tasks, int st, int curr, vector<int> &assign, int m)
     {
-        if(mask == ((1<<n) - 1))
+        if(curr == 0)
+            return true;
+        for(int i = 0; i < m; i++)
         {
-            // cout<<"here"<<endl;
-            //ans = min(ans, s);
-            return 1;
-        }
-        if(taken[mask][currSessTime] != -1)
-            return taken[mask][currSessTime];
-        int ans = INT_MAX;
-        for(int i = 0; i < n; i++)
-        {
-            if(tasks[i] != -1)
+            if(assign[i] + tasks[curr - 1] <= st)
             {
-                int k = tasks[i];
-                tasks[i] = -1;
-                if(currSessTime + k <= sessionTime)
-                {
-                    ans = min(ans, recur(tasks, sessionTime, currSessTime + k, mask | (1<<i)));
-                }
-                else
-                {
-                    
-                    int z = recur(tasks, sessionTime, k, mask | (1<<i));
-                    if(z != INT_MAX)
-                        ans = min(ans, 1+z);
-                }
-                tasks[i] = k;
+                assign[i] += tasks[curr - 1];
+                if(ok(tasks, st, curr-1, assign, m))
+                    return true;
+                assign[i] -= tasks[curr - 1];
             }
+            if(assign[i] == 0)
+                break;
         }
-        return taken[mask][currSessTime] = ans;
-        
+        return false;
     }
     int minSessions(vector<int>& tasks, int sessionTime) {
         n = tasks.size();
-        int mask = 0;
-        memset(taken, -1, sizeof(taken));
-        // vector<vector<bool>> taken(1<<n, vector<bool>(tasks.size() + 1, false));//maxm session = n
-        ans = INT_MAX;
-        return recur(tasks, sessionTime, 0, mask);
-        // return ans;
+        int l = 1, r = n;
+        int ans = -1;
+        while(l <= r)
+        {
+            int mid = (l + r)/2;
+            vector<int> assign(mid, 0);
+            if(ok(tasks, sessionTime, n, assign, mid))
+            {
+                ans = mid;
+                r = mid -1;
+            }
+            else
+                l = mid + 1;
+        }
+        return ans;
     }
 };
