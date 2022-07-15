@@ -11,24 +11,18 @@
  */
 class Solution {
 public:
-    int getMaxPath(TreeNode* root, int* maxSum)
+    int recur(TreeNode* root, int &ans)
     {
         if(!root)
             return 0;
-        int lsum = 0, rsum = 0;
-        if(root->left)
-            lsum = getMaxPath(root->left, maxSum);
-        if(root->right)
-            rsum = getMaxPath(root->right, maxSum);
-        int ans = max(max(root->val, lsum + root->val), rsum+root->val);
-        *maxSum = max(max(*maxSum, ans), lsum+rsum+root->val);
-        return ans;
+        int l = recur(root->left, ans);
+        int r = recur(root->right, ans);
+        ans = max(max(max(max(ans, l + r + root->val), l + root->val), r + root->val), root->val);
+        return max(max(l + root->val, r + root->val), root->val);
     }
     int maxPathSum(TreeNode* root) {
-        if(!root)
-            return 0;
-        int maxSum = INT_MIN;
-        getMaxPath(root, &maxSum);
-        return maxSum;
+        int ans = INT_MIN;
+        int a = recur(root, ans);
+        return max(ans, a);
     }
 };
