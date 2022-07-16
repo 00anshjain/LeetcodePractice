@@ -1,5 +1,5 @@
 # Minimize the Heights I
-##  Medium 
+## Medium 
 <div class="problem-statement">
                 <p></p><p><span style="font-size:18px">Given an array <strong>arr[]</strong>&nbsp;denoting heights of <strong>N</strong> towers and a positive integer <strong>K</strong>, you have to modify the height&nbsp;of each&nbsp;tower either by increasing or decreasing them by <strong>K</strong> only once.<br>
 Find out what could be the possible&nbsp;minimum difference of the height&nbsp;of shortest and longest towers after you have modified each tower.<br>
