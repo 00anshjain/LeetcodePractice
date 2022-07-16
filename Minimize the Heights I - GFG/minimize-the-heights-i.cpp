@@ -10,49 +10,22 @@ using namespace std;
 class Solution{   
 public:
     int getMinDiff(int arr[], int n, int k) {
-        vector<pair<int, int>> v;
-        int mx = 0, mn = INT_MAX;
-        for(int i = 0; i < n; i++)
+        sort(arr, arr+n);
+        int mx = arr[n-1];
+        int mn = arr[0];
+        int res = mx - mn;
+        // mx = arr[n-1] - k;
+        // mn = arr[0] + k;
+        for(int i = 1; i < n; i++)
         {
-            // if(arr[i]- k >= 0)
-                v.push_back({arr[i] - k, i});
-            v.push_back({arr[i] + k, i});
-            mx = max(mx, arr[i]);
-            mn = min(mn, arr[i]);
+            mx = max(arr[i-1] + k, arr[n-1] - k);
+            mn = min(arr[i] - k, arr[0] + k);
+            res = min(res, mx - mn);
+            
         }
-        int ans = mx - mn;
-        int ele = 0, left = 0, right = 0;
-        int sz = v.size();
-        sort(v.begin(), v.end());
-        vector<int> visited(n, 0);
-        while(ele < n && right < sz)
-        {
-            if(visited[v[right].second] == 0)
-                ele++;
-            visited[v[right].second]++;
-            right++;
-        }
-        if(ele == n)
-        {
-            ans = min(ans, v[right-1].first - v[left].first);
-        }
-        while(right < sz)
-        {
-            if(visited[v[left].second] == 1)
-                ele--;
-            visited[v[left].second]--;
-            left++;
-            while(ele < n && right < sz)
-            {
-                if(visited[v[right].second] == 0)
-                    ele++;
-                visited[v[right].second]++;
-                right++;
-            }
-            if(ele == n)
-                ans = min(ans, v[right-1].first - v[left].first);
-        }
-        return ans;
+        return res;
+        
+        
         // code here
     }
 };
