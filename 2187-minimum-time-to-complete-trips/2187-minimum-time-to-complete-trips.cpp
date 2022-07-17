@@ -1,34 +1,34 @@
 class Solution {
 public:
+    // [1, 10, 20]  =>5       , 5
     typedef long long ll;
-    bool check(ll mid, ll total, vector<int>& time)
+    ll n;
+    bool possible(ll t, vector<int> &time, ll total)
     {
-        ll t = 0;
-        for(auto x : time)
+        for(ll i = 0; i < n; i++)
         {
-            t += (mid/x);
-            if(t >= total)
+            total -= (t/time[i]);
+            if(total <= 0)
                 return true;
         }
         return false;
     }
-    long long minimumTime(vector<int>& time, int total) {
-        ll right = *min_element(time.begin(), time.end()) * (ll)total;
+    long long minimumTime(vector<int>& time, int totalTrips) {
+        n = time.size();
         ll left = 0;
-        ll ans = right;
-        while( left <= right)
+        ll right = ((ll)*max_element(time.begin(), time.end()))*(totalTrips);
+        ll ans = -1;
+        while(left <= right)
         {
             ll mid = (left + right)/2;
-            // cout<<mid<<endl;
-            if(check(mid, total, time))
+            if(possible(mid, time, totalTrips))
             {
-                // cout<<"idhar"<<endl;
-                right = mid - 1;
                 ans = mid;
+                right = mid - 1;
             }
             else
             {
-                left = mid+1;
+                left = mid + 1;
             }
         }
         return ans;
