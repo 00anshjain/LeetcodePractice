@@ -1,27 +1,23 @@
 class Solution {
 public:
     vector<vector<int>> validArrangement(vector<vector<int>>& pairs) {
-        unordered_map<int, stack<int>> mp;
+        unordered_map<int, vector<int>> mp;
         unordered_map<int, int> deg;
-        
         for(auto x : pairs)
         {
-            mp[x[0]].push(x[1]);
+            mp[x[0]].push_back(x[1]);
             deg[x[0]]++;
             deg[x[1]]--;
         }
-        int start = (mp.begin())->first;//start vertex, complete eulerian
-        for(auto x : mp)
+        int start = mp.begin()->first;//in case of complete euler
+        for(auto itr = deg.begin(); itr != deg.end(); itr++)
         {
-            // if(out[x.first] - in[x.first] == 1)
-            if(deg[x.first] == 1)
+            if((itr->second % 2) == 1)
             {
-                start = x.first;
+                start = itr->first;
                 break;
             }
         }
-        int u = start;
-        int end = -1;
         vector<vector<int>> res;
         stack<int> st;
         st.push(start);
@@ -30,8 +26,8 @@ public:
             int u = st.top();
             if(!mp[u].empty())
             {
-                int v = mp[u].top();
-                mp[u].pop();
+                int v = mp[u].back();
+                mp[u].pop_back();
                 st.push(v);
                 u = v;
             }
