@@ -1,49 +1,45 @@
 class Solution {
 public:
-    int findTheCity(int n, vector<vector<int>>& edges, int threshold) {
-        vector<pair<int, int>> adj[n];
+    int findTheCity(int n, vector<vector<int>>& edges, int thresh) {
+        vector<vector<int>> dist(n, vector<int>(n, -1));
         for(auto x : edges)
         {
-            adj[x[0]].push_back({x[1], x[2]});
-            adj[x[1]].push_back({x[0], x[2]});
+            dist[x[0]][x[1]] = x[2];
+            dist[x[1]][x[0]] = x[2];
         }
-        int ans = -1;
-        int mnNghbr = INT_MAX;
-        for(int i = 0; i < n; i++)
+        for(int k = 0; k < n; k++)
         {
-            vector<int> dist(n, INT_MAX);
-            dist[i] = 0;
-            priority_queue<pair<int, int>, vector<pair<int, int>>, greater<pair<int, int>>> pq;
-            pq.push({0, i});
-            while(!pq.empty())
+            for(int i = 0; i < n; i++)
             {
-                auto t = pq.top();
-                pq.pop();
-                int d = t.first;
-                int u = t.second;
-                if(d > threshold)
-                    continue;
-                for(auto x : adj[u])
+                for(int j = 0; j < n; j++)
                 {
-                    int v = x.first;
-                    int duv = x.second;
-                    if(dist[v] >= dist[u] + duv)
+                    dist[j][j] = 0;
+                    if(i == k || j == k)
+                        continue;
+                    if(dist[i][k] != -1 && dist[k][j] != -1)
                     {
-                        dist[v] = dist[u] + duv;
-                        pq.push({dist[v], v});
+                        if(dist[i][j] == -1)
+                            dist[i][j] = dist[i][k] + dist[k][j];
+                        else
+                            dist[i][j] = min(dist[i][j], dist[i][k] + dist[k][j]);
                     }
                 }
             }
+        }
+        int ans = 0, ansCnt = INT_MAX;
+        for(int i = 0; i < n; i++)
+        {
             int cnt = 0;
             for(int j = 0; j < n; j++)
             {
-                if(dist[j] <= threshold)
+                if(dist[i][j] <= thresh && dist[i][j] != -1)
                     cnt++;
             }
-            if(cnt <= mnNghbr)
+            // cout<<i<<" "<<ansCnt<<" "<<cnt<<endl;
+            if(cnt <= ansCnt)
             {
+                ansCnt = cnt;
                 ans = i;
-                mnNghbr = cnt;
             }
         }
         return ans;
