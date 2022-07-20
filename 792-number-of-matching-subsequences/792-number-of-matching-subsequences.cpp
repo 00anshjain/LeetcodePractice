@@ -16,18 +16,16 @@ public:
     }
     int numMatchingSubseq(string s, vector<string>& words) {
         unordered_map<string, int> mp;
-        for(auto x : words)
-            mp[x]++;
         vector<vector<int>> cnt(26);
         int n = s.size();
         for(int i = 0; i < n; i++)
             cnt[s[i] - 'a'].push_back(i);
         int ans = 0;
-        for(auto z : mp)
+        for(auto x : words)
         {
-            string x = z.first;
+            // string x = z.first;
             if(isMatch(x, cnt))
-                ans += z.second;
+                ans++;
         }
         return ans;
     }
