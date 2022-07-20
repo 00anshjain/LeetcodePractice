@@ -1,26 +1,34 @@
 class Solution {
 public:
+    bool isMatch(string &x, vector<vector<int>> &cnt)
+    {
+        int n = x.size();
+        int last = -1;
+        for(int i = 0; i <n; i++)
+        {
+            int c = x[i] - 'a';
+            auto t = upper_bound(cnt[c].begin(), cnt[c].end(), last);
+            if(t == cnt[c].end())
+                return false;
+            last = *t;
+        }
+        return true;
+    }
     int numMatchingSubseq(string s, vector<string>& words) {
-        int cnt = 0;
         unordered_map<string, int> mp;
         for(auto x : words)
             mp[x]++;
+        vector<vector<int>> cnt(26);
+        int n = s.size();
+        for(int i = 0; i < n; i++)
+            cnt[s[i] - 'a'].push_back(i);
+        int ans = 0;
         for(auto z : mp)
         {
             string x = z.first;
-            int n = s.size();
-            int m = x.size();
-            while(n > 0 && m > 0)
-            {
-                if(m > n)
-                    break;
-                if(s[n-1] == x[m-1])
-                    m--;
-                n--;
-            }
-            if(m == 0)
-                cnt+= z.second;
+            if(isMatch(x, cnt))
+                ans += z.second;
         }
-        return cnt;
+        return ans;
     }
 };
