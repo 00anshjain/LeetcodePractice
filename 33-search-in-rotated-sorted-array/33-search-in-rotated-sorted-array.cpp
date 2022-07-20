@@ -1,45 +1,38 @@
 class Solution {
 public:
-    int BS(vector<int>& arr, int left, int right, int t)
-    {
-        while(left <= right)
+    int search(vector<int>& nums, int target) {
+        // int n = nums.size();
+        int l = 0, r = nums.size() - 1;
+        while(l <= r)
         {
-            int mid = left + (right - left)/2;
-            if(arr[mid] == t)
+            int mid = l + (r-l)/2;
+            if(nums[mid] == target)
                 return mid;
-            else if(arr[mid] < t)
-                left = mid + 1;
+            if(nums[r] > nums[mid])
+            {
+                if(target > nums[mid] && target <= nums[r])
+                {
+                    l = mid + 1;
+                }
+                else
+                {
+                    r = mid - 1;
+                }
+            }
+            else if(nums[mid] > nums[l])
+            {
+                if(target < nums[mid] && target >= nums[l])
+                {
+                    r = mid - 1;
+                }
+                else
+                {
+                    l = mid + 1;
+                }
+            }
             else
-                right = mid - 1;
+                l++;
         }
         return -1;
-    }
-    int search(vector<int>& arr, int target) {
-        int n = arr.size();
-        int left = 0, right = n - 1;
-        int mnEle;
-        while(left <= right)
-        {
-            if(arr[left]<= arr[right])
-            {
-                mnEle = left;
-                break;
-            }
-            int mid = left + (right - left)/2;
-            if(arr[mid] <= arr[(mid+1)%n] && arr[mid] <= arr[(mid-1+n)%n])
-            {
-                mnEle = mid;
-                break;
-            }
-            if(arr[left]<= arr[mid])
-                left = mid + 1;
-            else
-                right = mid - 1;
-        }
-        int ans = BS(arr, 0, mnEle-1, target);
-        if(ans != -1)
-            return ans;
-        else return BS(arr, mnEle, n-1, target);
-        
     }
 };
