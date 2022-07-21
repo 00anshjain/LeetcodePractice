@@ -1,44 +1,28 @@
 class Solution {
 public:
-    
-    bool isInterleave(string A, string B, string C) {
-        int i = 0, j = 0, k = 0;
-        int n1 = A.size(), n2 = B.size(), n3 = C.size();
-        if(n1 + n2 != n3)
+    bool recur(string &s1, string &s2, string &s3, int n, int m, vector<vector<bool>> &dp)
+    {
+        if(!dp[n][m])
             return false;
-        vector<vector<bool>> dp(n1+1, vector<bool>(n2+1, false));
-        dp[0][0] = true;
-        for(int i = 1; i <= n2; i++)
+        if(n == 0 && m == 0)
+            return true;
+        // cout<<n<<" "<<m<<" "<<n+m-1<<endl;
+        if(n > 0 && s1[n-1] == s3[n+m-1])
         {
-            if(C[i-1] == B[i-1])
-                dp[0][i] = true;
-            else
-                break;
+            if(recur(s1, s2, s3, n-1, m, dp))
+                return true;
         }
-        for(int i = 1; i <= n1; i++)
+        if(m > 0 && s2[m-1] == s3[n+m-1])
         {
-            if(C[i-1] == A[i-1])
-                dp[i][0] = true;
-            else
-                break;
+            if(recur(s1, s2, s3, n, m-1, dp))
+                return true;
         }
-        
-        for(int i = 1; i <= n1; i++)
-        {
-            for(int j = 1; j <= n2; j++)
-            {
-                int k = i+j;
-                if(A[i-1] == C[k-1])
-                {
-                    dp[i][j] =  dp[i][j] || dp[i-1][j];
-                }
-                if(B[j-1] == C[k-1])
-                {
-                    dp[i][j] = dp[i][j] || dp[i][j-1];
-                }
-            }
-        }
-        return dp[n1][n2];
-        
+        return dp[n][m] = false;
+    }
+    bool isInterleave(string s1, string s2, string s3) {
+        if(s3.size() != s1.size() + s2.size())
+            return false;
+        vector<vector<bool>> dp(s1.size()+1, vector<bool>(s2.size()+1, true));
+        return recur(s1, s2, s3, s1.size(), s2.size(), dp);
     }
 };
