@@ -1,25 +1,24 @@
 class Solution {
 public:
-    vector<vector<int>> merge(vector<vector<int>>& intervals) {
-        int n = intervals.size();
-         sort(intervals.begin(), intervals.end());
-         vector<vector<int>> ans;
-         int t = -1;
-         int j = -1;
-         for(int i = 0; i < n; i++)
-         {
-             if(intervals[i][0] > t)
+    vector<vector<int>> merge(vector<vector<int>>& arr) {
+        sort(arr.begin(), arr.end());
+        vector<vector<int>> ans;
+        int  t= arr[0][0], end = arr[0][1];
+        int n = arr.size();
+        for(int i = 1; i < n; i++)
+        {
+            if(arr[i][0] > end)
             {
-                j++;
-                ans.push_back(intervals[i]);
-                t = intervals[i][1];
+                ans.push_back({t, end});
+                t = arr[i][0];
+                end = arr[i][1];
             }
             else
             {
-                ans[j][1] = max(ans[j][1], intervals[i][1]);
-                t = ans[j][1];
+                end = max(end, arr[i][1]);
             }
-         }
-         return ans;
+        }
+        ans.push_back({t, end});
+        return ans;
     }
 };
