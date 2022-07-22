@@ -14,33 +14,25 @@ public:
     void flatten(TreeNode* root) {
         stack<TreeNode*> st;
         TreeNode* head = root;
-        while(root)
+        TreeNode* prev = NULL;
+        while(root || !st.empty())
         {
-            // cout<<root->val<<" ";
-            if(!root->left && !root->right)
+            if(!root)
             {
-                if(st.empty())
-                {
-                    root->right = NULL;
-                    root = head;
-                    return;
-                }
-                root->right = st.top();
                 root = st.top();
                 st.pop();
             }
-            else if(!root->left)
+            if(root->right)
             {
-                root = root->right;
+                st.push(root->right);
             }
-            else
+            if(prev)
             {
-                if(root->right)
-                    st.push(root->right);
-                root->right = root->left;
-                root->left = NULL;
-                root = root->right;
+                prev->right = root;
+                prev->left = NULL;
             }
+            prev = root;
+            root = root->left;
         }
         root = head;
     }
