@@ -12,31 +12,35 @@
 class Solution {
 public:
     void flatten(TreeNode* root) {
-        TreeNode* head = root;
-        if(!root)
-            return;
         stack<TreeNode*> st;
-        TreeNode* prev = NULL;
-        while(!st.empty() || root)
+        TreeNode* head = root;
+        while(root)
         {
-            if(!root)
+            // cout<<root->val<<" ";
+            if(!root->left && !root->right)
             {
+                if(st.empty())
+                {
+                    root->right = NULL;
+                    root = head;
+                    return;
+                }
+                root->right = st.top();
                 root = st.top();
                 st.pop();
             }
-            // else
-            // {
-            if(root->right)
-                st.push(root->right);
-            // }
-            if(prev)
+            else if(!root->left)
             {
-                prev->right = root;
-                prev->left = NULL;
+                root = root->right;
             }
-            prev = root;
-            root = root->left;
-            
+            else
+            {
+                if(root->right)
+                    st.push(root->right);
+                root->right = root->left;
+                root->left = NULL;
+                root = root->right;
+            }
         }
         root = head;
     }
