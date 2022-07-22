@@ -3,8 +3,10 @@ public:
     multiset<int, greater<int>> st;
     int K;
     KthLargest(int k, vector<int>& nums) {
-        multiset<int, greater<int>> p(nums.begin(), nums.end());
-        st = p;
+        // multiset<int, greater<int>> p(nums.begin(), nums.end());
+        for(auto x : nums)
+            st.insert(x);
+        // st = p;
         K = k;
     }
     
