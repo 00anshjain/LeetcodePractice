@@ -1,46 +1,57 @@
 class Solution {
 public:
-    typedef long long ll;
     int mod = 1e9+7;
-    int Dijkstra(vector<pair<ll, ll>> adj[], ll n, ll src)
-    {
-        vector<ll> ways(n);
-        vector<ll> distance(n, LONG_MAX);
-        distance[src] = 0;
-        ways[src] = 1;
-        priority_queue<pair<ll, ll>, vector<pair<ll, ll>>, greater<pair<ll, ll>>> pq;
-        pq.push({0, src});
+    int countPaths(int n, vector<vector<int>>& roads) {
+        vector<pair<int, int>> adj[n];
+        vector<long long> ways(n, 0l);
+        for(auto x : roads)
+        {
+            adj[x[0]].push_back({x[1], x[2]});
+            adj[x[1]].push_back({x[0], x[2]});
+        }
+        
+        priority_queue<pair<long long, int>, vector<pair<long long, int>>, greater<pair<long long, int>>> pq;
+        pq.push({0l, 0});
+        vector<long long> dist(n, LONG_MAX);
+        dist[0] = 0l;
+        ways[0] = 1l;
+        // long long cnt = 0l;
         while(!pq.empty())
         {
-            auto [d, u] = pq.top();
+            pair<long long, int> p = pq.top();
             pq.pop();
-            if(d > distance[u])  // skip if d is not updated
+            int u = p.second;
+            long long d = p.first;
+            if(dist[u] < d)
                 continue;
-            for(auto [v, dis] : adj[u])
+            if(u == n-1)
+            // {
+            //     cnt++;
+            //     cnt %= mod;
+                continue;
+            // }
+            if(d >= dist[n-1])
+                continue;
+            for(auto t : adj[u])
             {
-                if(distance[v] > d + dis)
+                int v = t.first;
+                long long duv = t.second;
+                if(dist[v] > dist[u] + duv)
                 {
-                    distance[v] = d + dis;
                     ways[v] = ways[u];
-                    pq.push({distance[v], v});
+                    dist[v] = dist[u] + duv;
+                    pq.push({dist[v], v});
                 }
-                else if(distance[v] == d + dis)
+                else if(dist[v] == dist[u] + duv)
                 {
-                    ways[v] = (ways[v] +ways[u])%mod;
-                    // ways[v] %= mod;
+                    ways[v] += ways[u];
+                    ways[v] %= mod;
+                    // dist[v] = dist[u] + duv;
+                    // pq.push({dist[v], v});
                 }
             }
         }
-        return (int)ways[n-1];
-    }
-    int countPaths(int n, vector<vector<int>>& roads) {
-        vector<pair<ll, ll>> adj[n];
-        for(auto r : roads)
-        {
-            adj[r[0]].push_back({r[1], r[2]});
-            adj[r[1]].push_back({r[0], r[2]});
-        }
-        return Dijkstra(adj, n, 0);
-        
+        // cout<<dist[n-1]<<endl;
+        return ways[n-1];
     }
 };
