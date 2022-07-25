@@ -1,18 +1,33 @@
 class Solution {
 public:
     int characterReplacement(string s, int k) {
-        int n = s.size();
-        int j = 0, longest = 0;
-        int res = 0;
         unordered_map<char, int> mp;
+        int total = 0, mx = 0;
+        int ans = 0, j = 0, n = s.size();
         for(int i = 0; i < n; i++)
         {
             mp[s[i]]++;
-            longest = max(longest, mp[s[i]]);
-            if(i - j + 1 - longest > k)
-                mp[s[j++]]--;
-            res = max(res, i - j + 1);
+            total++;
+            if(mp[s[i]] > mx)
+            {
+                mx = mp[s[i]]; 
+            }
+            int Kreq = total - mx;
+            while(Kreq > k)
+            {
+                mp[s[j]]--;
+                j++;
+                total = 0;
+                mx = 0;
+                for(auto x : mp)
+                {
+                    total += x.second;
+                    mx = max(mx, x.second);
+                }
+                Kreq = total - mx;
+            }
+            ans = max(ans, i-j+1);
         }
-        return res;
+        return ans;
     }
 };
