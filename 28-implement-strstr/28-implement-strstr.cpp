@@ -1,28 +1,42 @@
 class Solution {
 public:
-    int strStr(string haystack, string needle) {
-        // int i = 0;
-        int n = needle.size();
-        int m = haystack.size(), j = 0;
-        while(j < m)
+    vector<int> prefix_function(string &s)
+    {
+        int n = s.size();
+        vector<int> pi(n, 0);
+        for(int i = 1; i < n; i++)
         {
-            if(needle[0] == haystack[j])
+            int j = pi[i-1];
+            while(j > 0 && s[i] != s[j])
+                j = pi[j-1];
+            if(s[i] == s[j])
+                j++;
+            pi[i] = j;
+        }
+        return pi;
+    }
+    int strStr(string t, string s) {
+        // int i = 0;
+        vector<int> pi = prefix_function(s);
+        int pos = -1;
+        int i(0), j(0);//trying this way of initialization
+        while(i < t.size())
+        {
+            if(t[i] == s[j])
             {
-                int i = 0;
-                int k = j;
-                while(i < n && k < m && haystack[k] == needle[i])
-                {
-                    i++;
-                    k++;
-                }
-                if(i == n)
-                    return j;
+                j++;
+                i++;
             }
-            j++;
-            // else i = 0;
-            // j++;
-            // if(i == n)
-            //     return j-n;
+            else{
+                if(j != 0)
+                {
+                    j = pi[j-1];
+                }
+                else
+                    i++;
+            }
+            if(j == s.size())
+                return i-s.size();
         }
         return -1;
     }
