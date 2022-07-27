@@ -37,8 +37,8 @@ public:
             int num = 0;
             for(auto y : x)
             {
-                if(skillNo.find(y) == skillNo.end())
-                    continue;
+                // if(skillNo.find(y) == skillNo.end())
+                //     continue;
                 num |= (1<<skillNo[y]);
             }
             skillmask.push_back(num);
