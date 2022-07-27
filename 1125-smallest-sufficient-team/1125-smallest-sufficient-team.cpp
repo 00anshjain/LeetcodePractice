@@ -1,36 +1,51 @@
 class Solution {
 public:
-    const int INF = 1e9 + 7;
-    vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
-        map<string, int> mp;
-        int n = req_skills.size();
-        int m = people.size();
-        for(int i = 0 ; i<n; i++)
-            mp[req_skills[i]] = i;
-        vector<int> skills(m,0);
-        for(int i = 0; i<m; i++)
+    unordered_map<string, int> skillNo;
+    int K;
+    int ans = INT_MAX;
+    vector<int> ans_vec;
+    void recur(vector<int>& skillmask, int n, int mask, int cnt, vector<int> &vec, vector<int>& dp)
+    {
+        if(n == 0)
         {
-            for(string x : people[i])
-            {   
-                skills[i] |= (1 << mp[x]);
-            }
-        }
-        int k = (1<<n);
-        vector<pair<int, vector<int>>> dp(1<<n, {INF, {}});
-        dp[0].first = 0;
-        for(int i = 0; i < m; i++)
-        {
-            for(int mask = 0; mask < k; mask++)
+            if(mask == (1<<K) - 1 && cnt < ans)
             {
-                int newMask = (mask | skills[i]);
-                if(dp[newMask].first > dp[mask].first + 1)
-                {
-                    dp[newMask].first = dp[mask].first + 1;
-                    dp[newMask].second = dp[mask].second;
-                    dp[newMask].second.push_back(i);
-                }
+                ans = cnt;
+                ans_vec = vec;
             }
+            return;
         }
-        return dp[k-1].second;
+        if(dp[mask] < cnt)
+            return;
+        dp[mask] = cnt;
+        recur(skillmask, n-1, mask, cnt, vec, dp);
+        vec.push_back(n-1);
+        recur(skillmask, n-1, mask | skillmask[n-1], cnt + 1, vec, dp);
+        vec.pop_back();
+        
+        
+    }
+    vector<int> smallestSufficientTeam(vector<string>& req_skills, vector<vector<string>>& people) {
+        int cnt = 0;
+        for(auto x : req_skills)
+            skillNo[x] = cnt++;
+        K = req_skills.size();
+        vector<int> dp(1<<K, INT_MAX);
+        vector<int> skillmask;
+        for(auto x: people)
+        {
+            int num = 0;
+            for(auto y : x)
+            {
+                if(skillNo.find(y) == skillNo.end())
+                    continue;
+                num |= (1<<skillNo[y]);
+            }
+            skillmask.push_back(num);
+        }
+        int curr = 0, c = 0;
+        vector<int> v;
+        recur(skillmask, people.size(), curr, c, v, dp);
+        return ans_vec;
     }
 };
