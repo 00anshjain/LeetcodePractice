@@ -2,22 +2,31 @@ class Solution {
 public:
     bool increasingTriplet(vector<int>& nums) {
         int n = nums.size();
-        if(n < 3)
+        if(n <= 2)
             return false;
-        int first_min = INT_MAX, second_min = INT_MAX;
+        int mn1 = INT_MAX, mn2 = INT_MAX;
+        // two small values we are holding, if new value isgreater that both, then we got the answer
         for(auto x : nums)
         {
-            if(x <= first_min)
+            // if(x > mn1)
+            // {
+            //     return true;
+            // }
+            // else 
+            if(x <= mn1)
             {
-                first_min = x;
+                mn1 = x;
+                // mn2 = mn1;
+                // mn1 = x;
             }
-            else if(x <= second_min)
+            else if(x <= mn2)
             {
-                second_min = x;
+                mn2 = x;
             }
             else
                 return true;
         }
+        // cout<<mn1<<" "<<mn2<<endl;
         return false;
     }
 };
