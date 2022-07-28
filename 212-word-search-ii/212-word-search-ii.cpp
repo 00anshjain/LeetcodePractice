@@ -1,11 +1,13 @@
 class TrieNode{
     public: 
     bool isEnd;
-    vector<TrieNode*> next;
+    TrieNode* next[26];
     TrieNode()
     {
         isEnd = false;
-        next = vector<TrieNode*>(26, NULL); 
+        for(int i = 0; i < 26; i++)
+            next[i] = NULL;
+        // next = vector<TrieNode*>(26, NULL); 
     }
 };
 class Solution {
