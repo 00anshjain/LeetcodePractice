@@ -2,34 +2,38 @@ class Solution {
 public:
     bool canFinish(int n, vector<vector<int>>& pre) {
         vector<int> adj[n];
-        vector<int> in(n, 0);
+        vector<int> deg(n, 0);
         for(auto x : pre)
         {
-            in[x[0]]++;
             adj[x[1]].push_back(x[0]);
+            deg[x[0]]++;
         }
+        int cnt = 0;
         queue<int> q;
-        for(int i = 0; i < n; i++)
+        for(int i = 0;i < n; i++)
         {
-            if(in[i] == 0)
+            if(deg[i] == 0)
+            {
                 q.push(i);
+                cnt++;
+            }
         }
         while(!q.empty())
         {
+            if(cnt == n)
+                return true;
             int t = q.front();
             q.pop();
             for(auto x : adj[t])
             {
-                in[x]--;
-                if(in[x] == 0)
+                deg[x]--;
+                if(deg[x] == 0)
+                {
                     q.push(x);
+                    cnt++;
+                }
             }
         }
-        for(int i = 0; i < n; i++)
-        {
-            if(in[i] != 0)
-                return false;
-        }
-        return true;
+        return false;
     }
 };
