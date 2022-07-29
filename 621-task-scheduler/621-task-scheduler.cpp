@@ -1,21 +1,39 @@
 class Solution {
 public:
     int leastInterval(vector<char>& tasks, int n) {
-        int mx = 0;
-        int cnt = 0;
         unordered_map<char, int> mp;
-        for(auto x : tasks)
+        for(auto c : tasks)
+            mp[c]++;
+        priority_queue<int> pq;
+        for(auto x : mp)
+            pq.push(x.second);
+        int cnt = 0;
+        while(1)
         {
-            mp[x]++;
-            if(mp[x] > mx)
+            vector<int> v;
+            for(int i = 0; i <= n; i++)
             {
-                mx = mp[x];
-                cnt = 1;
+                if(!pq.empty())
+                {
+                    auto t = pq.top();
+                    pq.pop();
+                    cnt++;
+                    t--;
+                    if(t > 0)
+                        v.push_back(t);
+                }
+                else
+                {
+                    if(v.empty())
+                        return cnt;
+                    cnt++;
+                }
             }
-            else if(mp[x] == mx)
-                cnt++;
+            for(auto x : v)
+                pq.push(x);
         }
-        // cout<<cnt<<" "<<mx<<endl;
-        return max((int)tasks.size(), (mx-1)*(n+1) + cnt);
+        return cnt;
+            
+        
     }
 };
