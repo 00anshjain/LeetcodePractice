@@ -1,42 +1,50 @@
 class Solution {
 public:
     double findMedianSortedArrays(vector<int>& nums1, vector<int>& nums2) {
-        int n = nums1.size();
-        int m = nums2.size();
-        if(n > m)
+        int n1 = nums1.size();
+        int n2 = nums2.size();
+        if(n1 > n2)
             return findMedianSortedArrays(nums2, nums1);
-        int low = 0, high = n;  
-        // 1, 3, 4, 5, 8, 10, 12 
-       // ^  ^  ^  ^  ^  ^   ^  ^
-        // 2, 3, 6, 15
-        int leftCount = (n+m+1)/2;//+1 because we want more lements towards left when odd elements total
-        while(low <= high)
+        int left = 0, right = n1;
+        int eleInLeft = (n1 + n2 + 1)/2;
+        while(left <= right)
         {
-            int cut1 = (low+high)/2;
-            int cut2 = leftCount - cut1; 
-            int left1 = INT_MIN, left2 = INT_MIN, right1 = INT_MAX, right2 = INT_MAX;
-            if(cut1 > 0)
-                left1 = nums1[cut1-1];
-            if(cut1 != n)
-                right1 = nums1[cut1];
-            if(cut2 != 0)
-                left2 = nums2[cut2 - 1];
-            if(cut2 != m)
-                right2 = nums2[cut2];
-            if(left1 > right2)
-                high = cut1 - 1;
-            else if(left2 > right1)
-                low = cut1 + 1;
+            int mid = (left+right)/2;
+            //mid is number of element of nums1 in the left
+            int l1 = INT_MIN;
+            if(mid > 0)
+                l1 = nums1[mid-1];
+            int r1 = INT_MAX;
+            if(mid < n1)
+                r1 = nums1[mid];
+            int mid2 = eleInLeft - mid;
+            // cout<<mid<<" "<<mid2<<endl;
+            int l2 = INT_MIN;
+            if(mid2 > 0)
+                l2 = nums2[mid2-1];
+            int r2 = INT_MAX;
+            if(mid2 < n2)
+                r2 = nums2[mid2];
+            if(l1 > r2)
+            {
+                right = mid - 1;
+                continue;
+            }
+            else if(l2 > r1)
+            {
+                left = mid + 1;
+                continue;
+            }
             else
             {
-                if((n+m)%2 == 0)
-                    return ((double)(max(left1, left2)) + min(right1, right2))/2;
+                // cout<<mid<<" "<<mid2<<endl;
+                // cout<<l1<<" "<<l2<<" "<<r1<<" "<<r2<<endl;
+                if((n1 + n2) % 2 != 0)
+                    return max(l1, l2);
                 else
-                    return max(left1, left2);
+                    return (max(l1, l2)+min(r1, r2))/2.0;
             }
-            
         }
         return -1;
-        
     }
 };
