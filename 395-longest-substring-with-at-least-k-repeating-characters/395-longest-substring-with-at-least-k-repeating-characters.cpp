@@ -1,38 +1,28 @@
 class Solution {
 public:
     int longestSubstring(string s, int k) {
-        unordered_set<char> st(s.begin(), s.end());
-        int mxUnique = st.size();
         int n = s.size();
+        if(n < k)
+            return 0;
+        unordered_map<char, int> mp;
+        for(auto c : s)
+            mp[c]++;
         int ans = 0;
-        for(int currUnq = 1; currUnq <= mxUnique; currUnq++)
+        int i = -1;
+        for(int j =0 ; j < n; j++)
         {
-            unordered_map<char, int> mp;
-            int matched = 0, i = 0, unq = 0;
-            for(int j = 0; j < n; j++)
-            {
-                mp[s[j]]++;
-                if(mp[s[j]] == 1)
-                    unq++;
-                if(mp[s[j]] == k)
-                {
-                    matched++;
-                }
-                while(unq > currUnq)
-                {
-                    if(mp[s[i]] == k)
-                        matched--;
-                    mp[s[i]]--;
-                    if(mp[s[i]] == 0)
-                        unq--;
-                    i++;
-                }
-                if(matched == unq)
-                {
-                    ans = max(ans, j-i+1);
-                }
+            if(mp[s[j]] < k)
+            {    
+                ans = max(ans, longestSubstring(s.substr(i+1, j-i-1), k));
+                i = j;
+                // cout<<ans<<" "<<i<<" "<<j<<endl;
             }
         }
+        // cout<<i<<endl;
+        if(i == -1)
+            return n-i-1;
+        else 
+            ans = max(ans, longestSubstring(s.substr(i+1, n-i-1), k));
         return ans;
     }
 };
