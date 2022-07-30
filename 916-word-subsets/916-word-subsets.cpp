@@ -1,30 +1,30 @@
 class Solution {
 public:
     vector<string> wordSubsets(vector<string>& words1, vector<string>& words2) {
-        unordered_map<char, int> f;
+        vector<int> f(26, 0);
         for(auto w : words2)
         {
-            unordered_map<char, int> mp;
+            vector<int> mp(26, 0);
             for(auto c : w)
             {
-                mp[c]++;
+                mp[c-'a']++;
             }
-            for(auto x : mp)
+            for(int i = 0; i < 26; i++)
             {
-                f[x.first] = max(f[x.first], x.second);
+                f[i] = max(f[i], mp[i]);
             }
-            // f.push_back(mp);
         }
         vector<string> ans;
         for(auto w : words1)
         {
-            unordered_map<char, int> mp;
+            // unordered_map<char, int> mp;
+            vector<int> mp(26, 0);
             for(auto c : w)
-                mp[c]++;
+                mp[c-'a']++;
             bool flag = false;
-            for(auto x : f)
+            for(int i = 0; i < 26; i++)
             {
-                if(mp[x.first] < x.second)
+                if(mp[i] < f[i])
                 {
                     flag = true;
                     break;
@@ -33,19 +33,6 @@ public:
             if(!flag)
                 ans.push_back(w);
             
-//             for(auto freqmap : f)
-//             {
-//                 for(auto x : freqmap)
-//                 {
-//                     if(x.second > mp[x.first])
-//                     {
-//                         flag = true;
-//                         break;
-//                     }
-//                 }
-//                 if(flag)
-//                     break;
-//             }
         }
         return ans;
     }
