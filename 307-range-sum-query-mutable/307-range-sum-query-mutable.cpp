@@ -1,7 +1,8 @@
 class NumArray {
 public:
-    // int seg[4e5+1];
-    vector<int> seg;
+    const static int sz = 1e5+2;
+    int seg[4*sz];
+    // vector<int> seg;
     int n;
     void buildSeg(vector<int>& nums, int idx, int l, int r)
     {
@@ -19,7 +20,7 @@ public:
     }
     NumArray(vector<int>& nums) {
         n = nums.size();
-        seg.resize(6*n+1, 0);
+        // seg.resize(6*n+1, 0);
         // cout<<endl;
         buildSeg(nums, 0, 0, n-1);
     }
