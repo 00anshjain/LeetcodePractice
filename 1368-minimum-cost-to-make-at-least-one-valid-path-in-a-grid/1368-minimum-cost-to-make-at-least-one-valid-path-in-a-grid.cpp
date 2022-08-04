@@ -1,35 +1,46 @@
 class Solution {
 public:
-    int colInc[5] = {0, 1, -1, 0, 0};
-    int rowInc[5] = {0, 0, 0, 1, -1};
-    
+    struct Cell{
+        int row;
+        int col;
+        int cost;
+        Cell(int r, int c, int co)
+        {
+            row = r;
+            col = c;
+            cost = co;
+        }
+    };
+    int rdir[5] = {0, 0, 0, 1, -1};
+    int cdir[5] = {0, 1, -1, 0, 0};
     int minCost(vector<vector<int>>& grid) {
-        int n = grid.size();
-        int m = grid[0].size();
-        vector<vector<bool>> visited(n, vector<bool>(m, false));
-        deque<pair<pair<int, int>, int>> q;
-        q.push_back({{0, 0}, 0});
+        int n = grid.size(), m = grid[0].size();
+        deque<Cell> q;
+        q.push_back(Cell(0, 0, 0));
         while(!q.empty())
         {
-            auto [z, d] = q.front();
-            auto [r, c] = z;
+            Cell cell = q.front();
             q.pop_front();
-            if(visited[r][c])
+            int r = cell.row;
+            int c = cell.col;
+            int co = cell.cost;
+            if(grid[r][c] == -1)
                 continue;
-            visited[r][c] = true;
             if(r == n-1 && c == m-1)
-                return d;
-            for(int i = 1; i <= 4; i++)
+                return co;
+            // grid[r][c] = -1;
+            for(int k = 1; k <= 4; k++)
             {
-                int R = r + rowInc[i];
-                int C = c + colInc[i];
-                if(R < 0 || C < 0 || R>= n || C >= m || visited[R][C])
+                int R = r + rdir[k];
+                int C = c + cdir[k];
+                if(R < 0 || C < 0 || R >= n || C >= m)
                     continue;
-                if(grid[r][c] == i)
-                    q.push_front({{R, C}, d});
+                if(grid[r][c] == k)
+                    q.push_front(Cell(R, C, co));
                 else
-                    q.push_back({{R, C}, d+1});
+                    q.push_back(Cell(R, C, co+1));
             }
+            grid[r][c] = -1;
         }
         return -1;
     }
