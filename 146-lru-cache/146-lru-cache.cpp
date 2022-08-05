@@ -1,92 +1,102 @@
 class LRUCache {
 public:
-    struct Node{
-        int key;
-        int val;
-        Node* left;
-        Node* right;
-         
-        Node(int key, int value)
-        {
-            this->key = key;
-            this->val = value;
-            left = NULL;
-            right = NULL;
-        }
+    class Node{
+        public:
+            int key;
+            int value;
+            Node* left;
+            Node* right;
+            Node(int k, int val)
+            {
+                key = k;
+                value = val;
+                left = NULL;
+                right = NULL;
+            }
     };
+    int capacity, sz;
     unordered_map<int, Node*> mp;
-    int cap, size;
-    Node* head, *tail;
-    void deleteNode(Node* p)
+    Node *head, *tail;
+    LRUCache(int capacity) {
+        this->capacity = capacity;
+        sz = 0;
+        // mp.clear();
+        head = NULL; tail = NULL;
+    }
+    // void insert(int key, int val)
+    // {
+    //     Node* curr = new Node(key, val);
+    //     if(!head)
+    //     {
+    //         head = tail = curr;
+    //         // return;
+    //     }
+    //     else
+    //     {
+    //         tail->right = curr;
+    //         curr->left = tail;
+    //         tail = curr;
+    //     }
+    //     sz += 1;
+    // }
+    void insert(Node* curr)
     {
-        if(p->left != NULL)
-            p->left->right = p->right;
+        // Node* curr = new Node(key, val);
+        if(!head)
+        {
+            head = tail = curr;
+            // return;
+        }
         else
         {
-            head = p->right;
-            // if(head)
-            //     head->left = NULL;
+            tail->right = curr;
+            curr->left = tail;
+            tail = curr;
         }
-        if(p->right != NULL)
+    }
+    void deleteNode(Node* p)
+    {
+        if(p->left)
+            p->left->right = p->right;
+        else
+            head = p->right;
+        if(p->right)
             p->right->left = p->left;
         else
             tail = p->left;
-        
         p->left = NULL;
         p->right = NULL;
-        size--;
-    }
-    void insertNode(Node* p)
-    {
-        size++;
-        if(!head)
-        {
-            head = tail = p;
-            // p->left = NULL;
-            // p->right = NULL;
-            return;
-        }
-        tail->right = p;
-        p->left = tail;
-        tail = p;
-        return;
-    }
-    LRUCache(int capacity) {
-        cap = capacity;
-        size = 0;
-        head = NULL;
-        tail = NULL;
     }
     int get(int key) {
         if(mp.find(key) == mp.end())
             return -1;
         Node* p = mp[key];
         deleteNode(p);
-        insertNode(p);
-        return p->val;
+        insert(p);
+        return p->value;
     }
     
     void put(int key, int value) {
         if(mp.find(key) != mp.end())
         {
+            mp[key]->value = value;
             Node* p = mp[key];
+            // p->value = value;
             deleteNode(p);
-            p->val = value;
-            mp[key] = p;
-            insertNode(p);
+            insert(mp[key]);
         }
         else
         {
-            Node* p = new Node(key, value);
-            mp[key] = p;
-            if(size < cap)
+            Node* curr = new Node(key, value);
+            if(sz == capacity)
             {
-                insertNode(p);
-                return;
+                mp.erase(head->key);
+                deleteNode(head);
+                sz--;
             }
-            mp.erase(head->key);
-            deleteNode(head);
-            insertNode(p);
+            insert(curr);
+            mp[key] = curr;
+            sz++;
         }
     }
 };
