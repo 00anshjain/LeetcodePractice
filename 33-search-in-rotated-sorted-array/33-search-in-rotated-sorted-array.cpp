@@ -8,7 +8,7 @@ public:
             int mid = l + (r-l)/2;
             if(nums[mid] == target)
                 return mid;
-            if(nums[r] > nums[mid])
+            if(nums[r] >= nums[mid])
             {
                 if(target > nums[mid] && target <= nums[r])
                 {
@@ -19,7 +19,7 @@ public:
                     r = mid - 1;
                 }
             }
-            else if(nums[mid] > nums[l])
+            else if(nums[mid] >= nums[l])
             {
                 if(target < nums[mid] && target >= nums[l])
                 {
@@ -31,7 +31,8 @@ public:
                 }
             }
             else
-                l++;
+                return -1;
+                // l++;
         }
         return -1;
     }
