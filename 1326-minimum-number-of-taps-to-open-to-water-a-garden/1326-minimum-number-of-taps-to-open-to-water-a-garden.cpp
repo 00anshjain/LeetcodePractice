@@ -15,6 +15,8 @@ public:
         {
             if(i > mx)
                 return -1;
+            if(i == n)
+                break;
             mx = max(mx, i + jump[i]);
             curr--;
             if(curr == 0)
@@ -23,6 +25,7 @@ public:
                 jmp++;
             }
         }
-        return jmp-1;
+        
+        return jmp;
     }
 };
