@@ -3,6 +3,15 @@ public:
     int largestOverlap(vector<vector<int>>& img1, vector<vector<int>>& img2) {
         int ans = 0;
         int n = img1.size();
+        vector<pair<int, int>> g;
+        for(int i = 0; i < n; i++)
+        {
+            for(int j = 0; j < n; j++)
+            {
+                if(img2[i][j])
+                    g.push_back({i, j});
+            }
+        }
         for(int vshift = -n+1; vshift <= n-1; vshift++)
         {
             for(int hshift = -n+1; hshift <= n-1; hshift++)
@@ -20,14 +29,18 @@ public:
                     }
                 }
                 int cnt = 0;
-                for(int i = 0; i < n; i++)
+                for(auto x : g)
                 {
-                    for(int j = 0; j < n; j++)
-                    {
-                        if(img[i][j] ==1 && img2[i][j] == 1)
-                            cnt++;
-                    }
+                    if(img[x.first][x.second])  cnt++;
                 }
+                // for(int i = 0; i < n; i++)
+                // {
+                //     for(int j = 0; j < n; j++)
+                //     {
+                //         if(img[i][j] ==1 && img2[i][j] == 1)
+                //             cnt++;
+                //     }
+                // }
                 ans = max(ans, cnt);
             }
         }
