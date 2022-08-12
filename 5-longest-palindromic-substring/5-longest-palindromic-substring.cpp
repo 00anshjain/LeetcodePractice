@@ -2,35 +2,37 @@ class Solution {
 public:
     string longestPalindrome(string s) {
         int n = s.size();
-        bool dp[n][n];
-        memset(dp, false, sizeof(dp));
-        int start = 0, end = 0;
-        for(int i = 0; i < n-1; i++)
+        int start = 0;
+        int ans = 0;
+        for(int i = 0; i < n; i++)
         {
-            dp[i][i] = true;
-            if(s[i] == s[i+1])
+            int l = i, r = i;
+            while(l >= 0 && r < n && s[l] == s[r])
             {
-                dp[i][i+1] = true;
-                start = i;
-                end = i+1;
+                l--;
+                r++;
             }
-        }
-        dp[n-1][n-1] = true;
-        for(int i = n-3; i >= 0; i--)
-        {
-            for(int j = i+2; j < n; j++)
+            if(ans < (r-1) - (l+1) + 1)
             {
-                if(s[i] == s[j] && dp[i+1][j-1])
-                {
-                    dp[i][j] = true;
-                    if(j - i > end - start)
-                    {
-                        end = j;
-                        start = i;
-                    }
-                }
+                start = l+1;
+                ans = (r-1) - (l+1) + 1;
             }
+            // ans = max(ans, (l+1 + r-1 + 1));
+            if(i + 1 == n)
+                continue;
+            l = i, r = i+1;
+            while(l >= 0 && r < n && s[l] == s[r])
+            {
+                l--;
+                r++;
+            }
+            if(ans < (r-1) - (l+1) + 1)
+            {
+                start = l+1;
+                ans = (r-1) - (l+1) + 1;
+            }
+            // ans = max(ans, (l+1 + r-1 + 1));
         }
-        return s.substr(start, end-start+1);
+        return s.substr(start, ans);
     }
 };
