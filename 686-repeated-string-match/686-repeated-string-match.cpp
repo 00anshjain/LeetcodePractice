@@ -1,6 +1,6 @@
 class Solution {
 public:
-    int repeatedStringMatch(string a, string b) {
+    int repeatedStringMatch(string &a, string &b) {
         int n = a.size();
         int m = b.size();
         // int cnt = n/m + (n%m > 0 ? 1 : 0);
