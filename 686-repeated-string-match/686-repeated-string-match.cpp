@@ -1,41 +1,36 @@
 class Solution {
 public:
     int repeatedStringMatch(string a, string b) {
-        int n1 = a.size();
-        int n2 = b.size();
-        int j = 0;
-        int start = 0;
-        // int ans = -1;
-        while(start < n1)
+        int n = a.size();
+        int m = b.size();
+        // int cnt = n/m + (n%m > 0 ? 1 : 0);
+        int cnt = 0;
+        int sz = 0;
+        string s = "";
+        while(sz < m)
         {
-            while(start < n1 && a[start] != b[0])
-                start++;
-            // cout<<start<<endl;
-            if(start == n1)
-                break;
-            int j = start, i = 0;
-            int cnt = 1;
-            for(i = 0; i < n2; i++)
-            {
-                if(j == n1)
-                {
-                    j = 0;
-                    cnt++;
-                }
-                if(a[j] != b[i])
-                {
-                    cnt = -1;
-                    break;
-                }
-                j++;
-            }
-            // cout<<start<<" "<<cnt<<endl;
-            if(cnt != -1)
-                return cnt;
-            start++;
-            // if(ans != -1)
-            //     break;
+            cnt++;
+            s += a;
+            sz += n;
         }
+        int i = 0, j = m-1;
+        while(i < sz && s.substr(i, m) != b)
+        {
+            i++;
+        }
+        if(i < sz)
+            return cnt;
+        cnt++;
+        s += a;
+        sz += n;
+        i = 0; j = m-1;
+        while(i < sz && s.substr(i, m) != b)
+        {
+            i++;
+        }
+        if(i < sz)
+            return cnt;
         return -1;
+        
     }
 };
