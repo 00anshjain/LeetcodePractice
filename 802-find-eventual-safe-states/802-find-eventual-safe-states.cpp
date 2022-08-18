@@ -1,39 +1,34 @@
 class Solution {
 public:
-    bool DFS(int u, vector<int> &visited, vector<vector<int>>& graph)
+    int DFS(int i, vector<vector<int>> &graph, vector<int> &isSafe)
     {
-        if(visited[u] != -1)
-            return visited[u];
-        visited[u] = 1;//not safe
-        bool flag = false;
-        for(auto v : graph[u])
+        if(isSafe[i] != -1)
+            return isSafe[i];
+        // cout<<i<<endl;
+        isSafe[i] = 0;
+        for(auto x : graph[i])
         {
-            if(visited[v] == 0)
-                continue;
-            else if(visited[v] == 1)
+            if(DFS(x, graph, isSafe) == 0)
             {
-                flag = true;//cycle found or unsafe termination found
-                continue;
-            }
-            else
-            {
-                if(DFS(v, visited, graph)) //true means not terminating
-                    flag = true;
+                isSafe[i] = 0;
+                return 0;
             }
         }
-        if(!flag) //no problem found good terminating
-            visited[u] = 0;//0 means no cycle;
-        return visited[u];
+        isSafe[i] = 1;
+        return 1;
     }
     vector<int> eventualSafeNodes(vector<vector<int>>& graph) {
         int n = graph.size();
-        vector<int> visited(n, -1);
+        vector<int> isSafe(n, -1);
+        for(int i = 0; i < n; i++)
+        {
+            if(isSafe[i] == -1)
+                DFS(i, graph, isSafe);
+        }
         vector<int> ans;
         for(int i = 0; i < n; i++)
         {
-            //0 means safe
-            // 1 means unsafe
-            if(!DFS(i, visited, graph))
+            if(isSafe[i] == 1)
                 ans.push_back(i);
         }
         return ans;
