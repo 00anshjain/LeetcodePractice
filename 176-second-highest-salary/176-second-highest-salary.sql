@@ -1,6 +1,5 @@
 # Write your MySQL query statement below
 # Without using limit
-Select(Select distinct salary
-FROM Employee
-order by Salary Desc
-Limit 1, 1) AS SecondHighestSalary;
+Select max(Salary) as SecondHighestSalary
+from Employee
+where salary not in (Select max(salary) from Employee);
