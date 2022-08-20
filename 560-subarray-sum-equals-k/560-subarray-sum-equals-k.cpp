@@ -8,7 +8,8 @@ public:
         for(int i = 0; i < n; i++)
         {
             s += nums[i];
-            ans += mp[s - k];
+            if(mp.find(s-k) != mp.end())
+                ans += mp[s - k];
             mp[s]++;
         }
         return ans;
